@@ -2,7 +2,10 @@
 #include "TextureManager.h"
 #include <cassert>
 
-GameScene::GameScene() {}
+GameScene::GameScene() { 
+	delete model_; 
+	delete player_;
+}
 
 GameScene::~GameScene() {}
 
@@ -11,9 +14,17 @@ void GameScene::Initialize() {
 	dxCommon_ = DirectXCommon::GetInstance();
 	input_ = Input::GetInstance();
 	audio_ = Audio::GetInstance();
+
+	textureHandle_ = TextureManager::Load("uvChecker.png");
+	model_= Model::Create();
+	worldTransform_.Initialize();
+	viewProjection_.Initialize();
+
+	player_ = new Player();
+	player_->Initialize();
 }
 
-void GameScene::Update() {}
+void GameScene::Update() { player_->Update(); }
 
 void GameScene::Draw() {
 
@@ -37,7 +48,8 @@ void GameScene::Draw() {
 #pragma region 3Dオブジェクト描画
 	// 3Dオブジェクト描画前処理
 	Model::PreDraw(commandList);
-
+	player_->Draw();
+	model_->Draw(worldTransform_, viewProjection_, textureHandle_);
 	/// <summary>
 	/// ここに3Dオブジェクトの描画処理を追加できる
 	/// </summary>
