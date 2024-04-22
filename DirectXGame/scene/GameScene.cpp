@@ -111,6 +111,7 @@ void GameScene::Draw() {
 	// スプライト描画後処理
 	Sprite::PostDraw();
 
+	delete model_;
 #pragma endregion
 
 }
