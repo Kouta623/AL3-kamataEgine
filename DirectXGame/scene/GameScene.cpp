@@ -59,8 +59,8 @@ void GameScene::Update() {
 	ImGui::End();
 	ImGui::ShowDemoWindow();
 
-	debugCamera_->Update();
 #endif // DEBUG
+	debugCamera_->Update();
 
 }
 
