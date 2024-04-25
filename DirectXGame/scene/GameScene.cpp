@@ -6,6 +6,11 @@
 GameScene::GameScene() { 
 	delete model_; 
 	delete player_;
+	delete blockModel_;
+	for (WorldTransform* worldTransformBlocks : worldTransformBlocks_) {
+		delete worldTransformBlocks;
+	}
+	worldTransformBlocks_.clear();
 }
 
 GameScene::~GameScene() {}
@@ -23,6 +28,8 @@ void GameScene::Initialize() {
 
 	player_ = new Player();
 	player_->Initialize(model_, textureHandle_, &viewProjection_);
+
+	blockModel_ = Model::Create();
 }
 
 void GameScene::Update() { player_->Update(); }
