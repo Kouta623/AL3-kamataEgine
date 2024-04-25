@@ -1,6 +1,7 @@
 #include "GameScene.h"
 #include "TextureManager.h"
 #include <cassert>
+#include "Player.h"
 
 GameScene::GameScene() { 
 	delete model_; 
@@ -21,7 +22,7 @@ void GameScene::Initialize() {
 	viewProjection_.Initialize();
 
 	player_ = new Player();
-	player_->Initialize();
+	player_->Initialize(model_, textureHandle_, &viewProjection_);
 }
 
 void GameScene::Update() { player_->Update(); }

@@ -12,7 +12,7 @@ public:
 	/// </summary>
 	/// <param name="model">モデル</param>
 	/// <param name="textureHandle">テクスチャーハンドル</param>
-	void Initialize(Model*model,uint32_t textureHandle);
+	void Initialize(Model* model, uint32_t textureHandle, ViewProjection* viewProjection);
 
 	/// <summary>
 	/// アップデート
@@ -29,4 +29,5 @@ private:
 	WorldTransform worldTransform_;
 	Model* model_ = nullptr;
 	uint32_t textureHandle_ = 0u;
+	ViewProjection* viewProjection_ = nullptr;
 };
