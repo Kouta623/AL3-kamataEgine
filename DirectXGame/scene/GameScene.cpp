@@ -1,12 +1,12 @@
 #include "GameScene.h"
+#include "Player.h"
 #include "TextureManager.h"
 #include <cassert>
-#include "Player.h"
 
-GameScene::GameScene() { 
-	delete model_; 
+GameScene::GameScene() {
+	delete model_;
 	delete player_;
-	delete blockModel_;
+	delete block_;
 	for (WorldTransform* worldTransformBlocks : worldTransformBlocks_) {
 		delete worldTransformBlocks;
 	}
@@ -22,17 +22,38 @@ void GameScene::Initialize() {
 	audio_ = Audio::GetInstance();
 
 	textureHandle_ = TextureManager::Load("uvChecker.png");
-	model_= Model::Create();
+	model_ = Model::Create();
 	worldTransform_.Initialize();
 	viewProjection_.Initialize();
 
 	player_ = new Player();
 	player_->Initialize(model_, textureHandle_, &viewProjection_);
 
-	blockModel_ = Model::Create();
+	block_ = Model::Create();
+	blockTextureHandle_ = TextureManager::Load("cube/cube.jpg");
+	// 要素数
+	const uint32_t kNumBlockHorizontal = 20;
+	// ブロックい1つの横幅
+	const float kBlockWidth = 2.0f;
+	// 要素数の変更
+	worldTransformBlocks_.resize(kNumBlockHorizontal);
+	// キューブの生成
+	for (uint32_t i = 0; i < kNumBlockHorizontal; i++) {
+
+		worldTransformBlocks_[i] = new WorldTransform();
+		worldTransformBlocks_[i]->Initialize();
+		worldTransformBlocks_[i]->translation_.x = kBlockWidth * i;
+		worldTransformBlocks_[i]->translation_.y = 0.0f;
+	}
 }
 
-void GameScene::Update() { player_->Update(); }
+void GameScene::Update() { 
+
+	player_->Update(); 
+	for (WorldTransform* worldTransformBlocks: worldTransformBlocks_) {
+
+	}
+}
 
 void GameScene::Draw() {
 

@@ -9,6 +9,7 @@
 #include "WorldTransform.h"
 #include "Player.h"
 #include <vector>
+
 /// <summary>
 /// ゲームシーン
 /// </summary>
@@ -51,8 +52,8 @@ private: // メンバ変数
 	uint32_t textureHandle_ = 0;
 	Player* player_ = nullptr;
 
-
-	Model* blockModel_ = nullptr;
+	Model* block_ = nullptr;
+	uint32_t blockTextureHandle_ = 0u;
 	std::vector<WorldTransform*> worldTransformBlocks_;
 
 	/// <summary>
