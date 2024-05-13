@@ -52,7 +52,7 @@ private: // メンバ変数
 	uint32_t textureHandle_ = 0;
 	Player* player_ = nullptr;
 
-	Model* block_ = nullptr;
+	Model* modelBlock_ = nullptr;
 	uint32_t blockTextureHandle_ = 0u;
 	std::vector<WorldTransform*> worldTransformBlocks_;
 

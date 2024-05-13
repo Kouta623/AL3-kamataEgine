@@ -9,3 +9,4 @@ struct Vector4 final {
 	float z;
 	float w;
 };
+

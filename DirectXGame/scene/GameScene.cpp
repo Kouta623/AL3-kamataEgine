@@ -2,11 +2,12 @@
 #include "Player.h"
 #include "TextureManager.h"
 #include <cassert>
+#include <mt3.h>
 
 GameScene::GameScene() {
 	delete model_;
 	delete player_;
-	delete block_;
+	delete modelBlock_;
 	for (WorldTransform* worldTransformBlocks : worldTransformBlocks_) {
 		delete worldTransformBlocks;
 	}
@@ -29,7 +30,7 @@ void GameScene::Initialize() {
 	player_ = new Player();
 	player_->Initialize(model_, textureHandle_, &viewProjection_);
 
-	block_ = Model::Create();
+	modelBlock_ = Model::Create();
 	blockTextureHandle_ = TextureManager::Load("cube/cube.jpg");
 	// 要素数
 	const uint32_t kNumBlockHorizontal = 20;
@@ -51,7 +52,8 @@ void GameScene::Update() {
 
 	player_->Update(); 
 	for (WorldTransform* worldTransformBlocks: worldTransformBlocks_) {
-
+		worldTransformBlocks->matWorld_ = MakeAffineMatrix(worldTransformBlocks->scale_, worldTransformBlocks->translation_, worldTransformBlocks->rotation_);
+		worldTransformBlocks->TransferMatrix();
 	}
 }
 
@@ -79,6 +81,10 @@ void GameScene::Draw() {
 	Model::PreDraw(commandList);
 	player_->Draw();
 	model_->Draw(worldTransform_, viewProjection_, textureHandle_);
+
+	for (WorldTransform* worldTransformBlocks : worldTransformBlocks_) {
+		modelBlock_->Draw(*worldTransformBlocks, viewProjection_);
+	}
 	/// <summary>
 	/// ここに3Dオブジェクトの描画処理を追加できる
 	/// </summary>
