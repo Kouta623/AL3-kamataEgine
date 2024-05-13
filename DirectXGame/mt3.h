@@ -486,5 +486,5 @@ Matrix4x4 MakeAffineMatrix(const Vector3& translate, const Vector3& rotate, cons
 	Matrix4x4 matScale = MakeScaleMatrix(scale);
 	Matrix4x4 matTranslate = MakeTranslateMatrix(translate);
 
-	return Matrix4x4(Multiply(matScale, Multiply(makeRotate, matTranslate)));
+	return Matrix4x4(Multiply((Multiply(matScale, makeRotate)),matTranslate));
 }
