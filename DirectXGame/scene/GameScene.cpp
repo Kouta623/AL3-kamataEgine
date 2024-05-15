@@ -8,13 +8,18 @@ GameScene::GameScene() {
 	delete model_;
 	delete player_;
 	delete modelBlock_;
-	for (WorldTransform* worldTransformBlocks : worldTransformBlocks_) {
-		delete worldTransformBlocks;
-	}
-	worldTransformBlocks_.clear();
+
 }
 
-GameScene::~GameScene() {}
+GameScene::~GameScene() {
+	for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_) {
+		for (WorldTransform* worldTransformBlocks : worldTransformBlockLine) {
+			delete worldTransformBlocks;
+		}
+	}
+		
+	worldTransformBlocks_.clear();
+}
 
 void GameScene::Initialize() {
 
@@ -33,18 +38,24 @@ void GameScene::Initialize() {
 	modelBlock_ = Model::Create();
 	blockTextureHandle_ = TextureManager::Load("cube/cube.jpg");
 	// 要素数
+	const uint32_t kNumBlockVirtical = 10;
 	const uint32_t kNumBlockHorizontal = 20;
 	// ブロックい1つの横幅
 	const float kBlockWidth = 2.0f;
+	const float kBlockHight = 2.0f;
 	// 要素数の変更
-	worldTransformBlocks_.resize(kNumBlockHorizontal);
+	worldTransformBlocks_.resize(kNumBlockVirtical);
 	// キューブの生成
-	for (uint32_t i = 0; i < kNumBlockHorizontal; ++i) {
-
-		worldTransformBlocks_[i] = new WorldTransform();
-		worldTransformBlocks_[i]->Initialize();
-		worldTransformBlocks_[i]->translation_.x = kBlockWidth * i;
-		worldTransformBlocks_[i]->translation_.y = 0.0f;
+	for (uint32_t i = 0;i< kNumBlockVirtical; ++i) {
+		worldTransformBlocks_[i].resize(kNumBlockHorizontal);
+	}
+	for (uint32_t i = 0; i<kNumBlockVirtical; ++i) {
+		for (uint32_t j = 0; j<kNumBlockHorizontal; ++j) {
+			worldTransformBlocks_[i][j] = new WorldTransform();
+			worldTransformBlocks_[i][j]->Initialize();
+			worldTransformBlocks_[i][j]->translation_.x = kBlockWidth * j;
+			worldTransformBlocks_[i][j]->translation_.y = kBlockHight*i;
+		}
 	}
 }
 
@@ -52,10 +63,14 @@ void GameScene::Update() {
 
 	player_->Update(); 
 
-	for (WorldTransform* worldTransformBlocks: worldTransformBlocks_) {
-		worldTransformBlocks->matWorld_ = MakeAffineMatrix(worldTransformBlocks->scale_, worldTransformBlocks->rotation_, worldTransformBlocks->translation_);
-		worldTransformBlocks->TransferMatrix();
+
+	for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_) {
+		for (WorldTransform* worldTransformBlocks : worldTransformBlockLine) {
+			worldTransformBlocks->matWorld_ = MakeAffineMatrix(worldTransformBlocks->scale_, worldTransformBlocks->rotation_, worldTransformBlocks->translation_);
+			worldTransformBlocks->TransferMatrix();
+		}
 	}
+	
 }
 
 void GameScene::Draw() {
@@ -83,9 +98,14 @@ void GameScene::Draw() {
 	player_->Draw();
 	model_->Draw(worldTransform_, viewProjection_, textureHandle_);
 
-	for (WorldTransform* worldTransformBlocks : worldTransformBlocks_) {
-		modelBlock_->Draw(*worldTransformBlocks, viewProjection_);
+
+	for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_) {
+		for (WorldTransform* worldTransformBlocks : worldTransformBlockLine) {
+			modelBlock_->Draw(*worldTransformBlocks, viewProjection_);
+
+		}
 	}
+	//
 	/// <summary>
 	/// ここに3Dオブジェクトの描画処理を追加できる
 	/// </summary>
