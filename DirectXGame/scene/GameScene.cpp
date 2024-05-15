@@ -50,7 +50,7 @@ void GameScene::Initialize() {
 		worldTransformBlocks_[i].resize(kNumBlockHorizontal);
 	}
 	for (uint32_t i = 0; i<kNumBlockVirtical; ++i) {
-		for (uint32_t j = 0; j<kNumBlockHorizontal; ++j) {
+		for (uint32_t j = 0; j<kNumBlockHorizontal; j+=2) {
 			worldTransformBlocks_[i][j] = new WorldTransform();
 			worldTransformBlocks_[i][j]->Initialize();
 			worldTransformBlocks_[i][j]->translation_.x = kBlockWidth * j;
@@ -66,6 +66,8 @@ void GameScene::Update() {
 
 	for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_) {
 		for (WorldTransform* worldTransformBlocks : worldTransformBlockLine) {
+			if (!worldTransformBlocks)
+				continue;
 			worldTransformBlocks->matWorld_ = MakeAffineMatrix(worldTransformBlocks->scale_, worldTransformBlocks->rotation_, worldTransformBlocks->translation_);
 			worldTransformBlocks->TransferMatrix();
 		}
@@ -101,6 +103,8 @@ void GameScene::Draw() {
 
 	for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_) {
 		for (WorldTransform* worldTransformBlocks : worldTransformBlockLine) {
+			if (!worldTransformBlocks)
+				continue;
 			modelBlock_->Draw(*worldTransformBlocks, viewProjection_);
 
 		}
