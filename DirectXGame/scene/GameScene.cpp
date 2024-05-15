@@ -39,7 +39,7 @@ void GameScene::Initialize() {
 	// 要素数の変更
 	worldTransformBlocks_.resize(kNumBlockHorizontal);
 	// キューブの生成
-	for (uint32_t i = 0; i < kNumBlockHorizontal; i++) {
+	for (uint32_t i = 0; i < kNumBlockHorizontal; ++i) {
 
 		worldTransformBlocks_[i] = new WorldTransform();
 		worldTransformBlocks_[i]->Initialize();
@@ -51,8 +51,9 @@ void GameScene::Initialize() {
 void GameScene::Update() { 
 
 	player_->Update(); 
+
 	for (WorldTransform* worldTransformBlocks: worldTransformBlocks_) {
-		worldTransformBlocks->matWorld_ = MakeAffineMatrix(worldTransformBlocks->scale_, worldTransformBlocks->translation_, worldTransformBlocks->rotation_);
+		worldTransformBlocks->matWorld_ = MakeAffineMatrix(worldTransformBlocks->scale_, worldTransformBlocks->rotation_, worldTransformBlocks->translation_);
 		worldTransformBlocks->TransferMatrix();
 	}
 }
