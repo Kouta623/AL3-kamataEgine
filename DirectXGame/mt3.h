@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <Vector3.h>
 #include <Vector4.h>
+#include <Matrix4x4.h>
 
 
 
@@ -44,81 +45,8 @@ static const int kColumnWidth = 60;
 //}
 
 
-
-//加算
-Vector3 Add(const Vector3& v1, Vector3& v2) {
-	return Vector3(v1.x + v2.x, v1.y + v2.y, v1.z + v2.z);
-
-}
-
-//減算
-Vector3 Subtract(const Vector3& v1, Vector3& v2) {
-	return Vector3(v1.x - v2.x, v1.y - v2.y, v1.z - v2.z);
-}
-
-//スカラー倍
-Vector3 Multiply(float scalar, Vector3& v) {
-
-	Vector3 result;
-	result.x = scalar * v.x;
-	result.y = scalar * v.y;
-	result.z = scalar * v.z;
-	return result;
-
-}
-
-//内積
-float Dot(const Vector3& v1, const Vector3& v2) {
-	return v1.x * v2.x + v1.y * v2.y + v1.z * v2.z;
-}
-
-//長さ
-float Length(const Vector3& v) {
-	return sqrtf(Dot(v, v));
-}
-
-
-//正規化
-Vector3 Normalize(const Vector3& v) {
-
-	Vector3 result;
-	result.x = v.x / Length(v);
-	result.y = v.y / Length(v);
-	result.z = v.z / Length(v);
-	return result;
-
-
-}
-
-
-//行列の加法
-Matrix4x4 Add(const Matrix4x4& m1, const Matrix4x4& m2) {
-	Matrix4x4 result = {};
-
-	for (int i = 0; i < 4; ++i) {
-		for (int j = 0; j < 4; ++j) {
-			result.m[i][j] = m1.m[i][j] + m2.m[i][j];
-		}
-	}
-
-	return result;
-}
-
-//行列の減法
-Matrix4x4 Subtract(const Matrix4x4& m1, const Matrix4x4& m2) {
-	Matrix4x4 result = {};
-
-	for (int i = 0; i < 4; ++i) {
-		for (int j = 0; j < 4; ++j) {
-			result.m[i][j] = m1.m[i][j] - m2.m[i][j];
-		}
-	}
-
-	return result;
-}
-
-//行列の積
-Matrix4x4 Multiply(const Matrix4x4& m1, const Matrix4x4& m2) {
+// 行列の積
+inline Matrix4x4 Multiply(const Matrix4x4& m1, const Matrix4x4& m2) {
 	Matrix4x4 result = {};
 
 	for (int i = 0; i < 4; ++i) {
@@ -133,229 +61,9 @@ Matrix4x4 Multiply(const Matrix4x4& m1, const Matrix4x4& m2) {
 	return result;
 }
 
-// 逆行列
-Matrix4x4 Invers(const Matrix4x4& m)
-{
-	Matrix4x4 result{};
-	float determinant = m.m[0][0] * (m.m[1][1] * m.m[2][2] * m.m[3][3] +
-		m.m[2][1] * m.m[3][2] * m.m[1][3] +
-		m.m[3][1] * m.m[1][2] * m.m[2][3] -
-		m.m[3][1] * m.m[2][2] * m.m[1][3] -
-		m.m[2][1] * m.m[1][2] * m.m[3][3] -
-		m.m[1][1] * m.m[3][2] * m.m[2][3]) -
-		m.m[0][1] * (m.m[1][0] * m.m[2][2] * m.m[3][3] +
-			m.m[2][0] * m.m[3][2] * m.m[1][3] +
-			m.m[3][0] * m.m[1][2] * m.m[2][3] -
-			m.m[3][0] * m.m[2][2] * m.m[1][3] -
-			m.m[2][0] * m.m[1][2] * m.m[3][3] -
-			m.m[1][0] * m.m[3][2] * m.m[2][3]) +
-		m.m[0][2] * (m.m[1][0] * m.m[2][1] * m.m[3][3] +
-			m.m[2][0] * m.m[3][1] * m.m[1][3] +
-			m.m[3][0] * m.m[1][1] * m.m[2][3] -
-			m.m[3][0] * m.m[2][1] * m.m[1][3] -
-			m.m[2][0] * m.m[1][1] * m.m[3][3] -
-			m.m[1][0] * m.m[3][1] * m.m[2][3]) -
-		m.m[0][3] * (m.m[1][0] * m.m[2][1] * m.m[3][2] +
-			m.m[2][0] * m.m[3][1] * m.m[1][2] +
-			m.m[3][0] * m.m[1][1] * m.m[2][2] -
-			m.m[3][0] * m.m[2][1] * m.m[1][2] -
-			m.m[2][0] * m.m[1][1] * m.m[3][2] -
-			m.m[1][0] * m.m[3][1] * m.m[2][2]);
-
-
-
-	if (determinant != 0) {
-		result.m[0][0] = (m.m[1][1] * m.m[2][2] * m.m[3][3] +
-			m.m[2][1] * m.m[3][2] * m.m[1][3] +
-			m.m[3][1] * m.m[1][2] * m.m[2][3] -
-			m.m[3][1] * m.m[2][2] * m.m[1][3] -
-			m.m[2][1] * m.m[1][2] * m.m[3][3] -
-			m.m[1][1] * m.m[3][2] * m.m[2][3]) /
-			determinant;
-
-		result.m[0][1] = -(m.m[0][1] * m.m[2][2] * m.m[3][3] +
-			m.m[2][1] * m.m[3][2] * m.m[0][3] +
-			m.m[3][1] * m.m[0][2] * m.m[2][3] -
-			m.m[3][1] * m.m[2][2] * m.m[0][3] -
-			m.m[2][1] * m.m[0][2] * m.m[3][3] -
-			m.m[0][1] * m.m[3][2] * m.m[2][3]) /
-			determinant;
-
-		result.m[0][2] = (m.m[0][1] * m.m[1][2] * m.m[3][3] +
-			m.m[1][1] * m.m[3][2] * m.m[0][3] +
-			m.m[3][1] * m.m[0][2] * m.m[1][3] -
-			m.m[3][1] * m.m[1][2] * m.m[0][3] -
-			m.m[1][1] * m.m[0][2] * m.m[3][3] -
-			m.m[0][1] * m.m[3][2] * m.m[1][3]) /
-			determinant;
-
-		result.m[0][3] = -(m.m[0][1] * m.m[1][2] * m.m[2][3] +
-			m.m[1][1] * m.m[2][2] * m.m[0][3] +
-			m.m[2][1] * m.m[0][2] * m.m[1][3] -
-			m.m[2][1] * m.m[1][2] * m.m[0][3] -
-			m.m[1][1] * m.m[0][2] * m.m[2][3] -
-			m.m[0][1] * m.m[2][2] * m.m[1][3]) /
-			determinant;
-
-
-		result.m[1][0] = -(m.m[1][0] * m.m[2][2] * m.m[3][3] +
-			m.m[2][0] * m.m[3][2] * m.m[1][3] +
-			m.m[3][0] * m.m[1][2] * m.m[2][3] -
-			m.m[3][0] * m.m[2][2] * m.m[1][3] -
-			m.m[2][0] * m.m[1][2] * m.m[3][3] -
-			m.m[1][0] * m.m[3][2] * m.m[2][3]) /
-			determinant;
-
-		result.m[1][1] = (m.m[0][0] * m.m[2][2] * m.m[3][3] +
-			m.m[2][0] * m.m[3][2] * m.m[0][3] +
-			m.m[3][0] * m.m[0][2] * m.m[2][3] -
-			m.m[3][0] * m.m[2][2] * m.m[0][3] -
-			m.m[2][0] * m.m[0][2] * m.m[3][3] -
-			m.m[0][0] * m.m[3][2] * m.m[2][3]) /
-			determinant;
-
-		result.m[1][2] = -(m.m[0][0] * m.m[1][2] * m.m[3][3] +
-			m.m[1][0] * m.m[3][2] * m.m[0][3] +
-			m.m[3][0] * m.m[0][2] * m.m[1][3] -
-			m.m[3][0] * m.m[1][2] * m.m[0][3] -
-			m.m[1][0] * m.m[0][2] * m.m[3][3] -
-			m.m[0][0] * m.m[3][2] * m.m[1][3]) /
-			determinant;
-
-		result.m[1][3] = (m.m[0][0] * m.m[1][2] * m.m[2][3] +
-			m.m[1][0] * m.m[2][2] * m.m[0][3] +
-			m.m[2][0] * m.m[0][2] * m.m[1][3] -
-			m.m[2][0] * m.m[1][2] * m.m[0][3] -
-			m.m[1][0] * m.m[0][2] * m.m[2][3] -
-			m.m[0][0] * m.m[2][2] * m.m[1][3]) /
-			determinant;
-
-
-		result.m[2][0] = (m.m[1][0] * m.m[2][1] * m.m[3][3] +
-			m.m[2][0] * m.m[3][1] * m.m[1][3] +
-			m.m[3][0] * m.m[1][1] * m.m[2][3] -
-			m.m[3][0] * m.m[2][1] * m.m[1][3] -
-			m.m[2][0] * m.m[1][1] * m.m[3][3] -
-			m.m[1][0] * m.m[3][1] * m.m[2][3]) /
-			determinant;
-
-		result.m[2][1] = -(m.m[0][0] * m.m[2][1] * m.m[3][3] +
-			m.m[2][0] * m.m[3][1] * m.m[0][3] +
-			m.m[3][0] * m.m[0][1] * m.m[2][3] -
-			m.m[3][0] * m.m[2][1] * m.m[0][3] -
-			m.m[2][0] * m.m[0][1] * m.m[3][3] -
-			m.m[0][0] * m.m[3][1] * m.m[2][3]) /
-			determinant;
-
-		result.m[2][2] = (m.m[0][0] * m.m[1][1] * m.m[3][3] +
-			m.m[1][0] * m.m[3][1] * m.m[0][3] +
-			m.m[3][0] * m.m[0][1] * m.m[1][3] -
-			m.m[3][0] * m.m[1][1] * m.m[0][3] -
-			m.m[1][0] * m.m[0][1] * m.m[3][3] -
-			m.m[0][0] * m.m[3][1] * m.m[1][3]) /
-			determinant;
-
-		result.m[2][3] = -(m.m[0][0] * m.m[1][1] * m.m[2][3] +
-			m.m[1][0] * m.m[2][1] * m.m[0][3] +
-			m.m[2][0] * m.m[0][1] * m.m[1][3] -
-			m.m[2][0] * m.m[1][1] * m.m[0][3] -
-			m.m[1][0] * m.m[0][1] * m.m[2][3] -
-			m.m[0][0] * m.m[2][1] * m.m[1][3]) /
-			determinant;
-
-		result.m[3][0] = -(m.m[1][0] * m.m[2][1] * m.m[3][2] +
-			m.m[2][0] * m.m[3][1] * m.m[1][2] +
-			m.m[3][0] * m.m[1][1] * m.m[2][2] -
-			m.m[3][0] * m.m[2][1] * m.m[1][2] -
-			m.m[2][0] * m.m[1][1] * m.m[3][2] -
-			m.m[1][0] * m.m[3][1] * m.m[2][2]) /
-			determinant;
-
-		result.m[3][1] = (m.m[0][0] * m.m[2][1] * m.m[3][2] +
-			m.m[2][0] * m.m[3][1] * m.m[0][2] +
-			m.m[3][0] * m.m[0][1] * m.m[2][2] -
-			m.m[3][0] * m.m[2][1] * m.m[0][2] -
-			m.m[2][0] * m.m[0][1] * m.m[3][2] -
-			m.m[0][0] * m.m[3][1] * m.m[2][2]) /
-			determinant;
-
-		result.m[3][2] = -(m.m[0][0] * m.m[1][1] * m.m[3][2] +
-			m.m[1][0] * m.m[3][1] * m.m[0][2] +
-			m.m[3][0] * m.m[0][1] * m.m[1][2] -
-			m.m[3][0] * m.m[1][1] * m.m[0][2] -
-			m.m[1][0] * m.m[0][1] * m.m[3][2] -
-			m.m[0][0] * m.m[3][1] * m.m[1][2]) /
-			determinant;
-
-		result.m[3][3] = (m.m[0][0] * m.m[1][1] * m.m[2][2] +
-			m.m[1][0] * m.m[2][1] * m.m[0][2] +
-			m.m[2][0] * m.m[0][1] * m.m[1][2] -
-			m.m[2][0] * m.m[1][1] * m.m[0][2] -
-			m.m[1][0] * m.m[0][1] * m.m[2][2] -
-			m.m[0][0] * m.m[2][1] * m.m[1][2]) /
-			determinant;
-	}
-
-	return result;
-}
-
-
-//転置行列
-Matrix4x4 Transpose(const Matrix4x4& m) {
-
-	Matrix4x4 result = {};
-
-	result.m[0][0] = m.m[0][0];
-	result.m[0][1] = m.m[1][0];
-	result.m[0][2] = m.m[2][0];
-	result.m[0][3] = m.m[3][0];
-
-	result.m[1][0] = m.m[0][1];
-	result.m[1][1] = m.m[1][1];
-	result.m[1][2] = m.m[2][1];
-	result.m[1][3] = m.m[3][1];
-
-	result.m[2][0] = m.m[0][2];
-	result.m[2][1] = m.m[1][2];
-	result.m[2][2] = m.m[2][2];
-	result.m[2][3] = m.m[3][2];
-
-	result.m[3][0] = m.m[0][3];
-	result.m[3][1] = m.m[1][3];
-	result.m[3][2] = m.m[2][3];
-	result.m[3][3] = m.m[3][3];
-
-	return result;
-}
-
-//単位行列
-Matrix4x4 MakeIdentity4x4() {
-
-	Matrix4x4 result = {};
-
-	result.m[0][0] = 1;
-	result.m[0][1] = 0;
-	result.m[0][2] = 0;
-	result.m[0][3] = 0;
-	result.m[1][0] = 0;
-	result.m[1][1] = 1;
-	result.m[1][2] = 0;
-	result.m[1][3] = 0;
-	result.m[2][0] = 0;
-	result.m[2][1] = 0;
-	result.m[2][2] = 1;
-	result.m[2][3] = 0;
-	result.m[3][0] = 0;
-	result.m[3][1] = 0;
-	result.m[3][2] = 0;
-	result.m[3][3] = 1;
-
-	return result;
-
-}
 
 //平行移動行列
-Matrix4x4 MakeTranslateMatrix(const Vector3& translate) {
+inline Matrix4x4 MakeTranslateMatrix(const Vector3& translate) {
 
 	Matrix4x4 result = {};
 	result.m[0][0] = 1.0f;
@@ -382,7 +90,7 @@ Matrix4x4 MakeTranslateMatrix(const Vector3& translate) {
 }
 
 //拡大縮小行列
-Matrix4x4 MakeScaleMatrix(const Vector3& scale) {
+inline Matrix4x4 MakeScaleMatrix(const Vector3& scale) {
 	Matrix4x4 result={};
 	result.m[0][0] = scale.x;
 	result.m[0][1] = 0.0f;
@@ -409,7 +117,7 @@ Matrix4x4 MakeScaleMatrix(const Vector3& scale) {
 
 
 //回転行列
-Matrix4x4 RotationX(float rotate) {
+inline Matrix4x4 RotationX(float rotate) {
 	float cosA = cosf(rotate);
 	float sinA = sinf(rotate);
 
@@ -426,7 +134,7 @@ Matrix4x4 RotationX(float rotate) {
 }
 
 
-Matrix4x4 RotationY(float rotate) {
+inline Matrix4x4 RotationY(float rotate) {
 	float cosA = cosf(rotate);
 	float sinA = sinf(rotate);
 
@@ -442,7 +150,7 @@ Matrix4x4 RotationY(float rotate) {
 	return Matrix4x4(result);
 }
 
-Matrix4x4 RotationZ(float rotate) {
+inline Matrix4x4 RotationZ(float rotate) {
 	float cosA = cosf(rotate);
 	float sinA = sinf(rotate);
 
@@ -458,7 +166,7 @@ Matrix4x4 RotationZ(float rotate) {
 }
 
 //座標変換
-Vector3 Transform(const Vector3& vector, const Matrix4x4& matrix) {
+inline Vector3 Transform(const Vector3& vector, const Matrix4x4& matrix) {
 	Vector3 result={};
 
 	result.x = vector.x * matrix.m[0][0] + vector.y * matrix.m[1][0] + vector.z * matrix.m[2][0] + matrix.m[3][0];
@@ -475,7 +183,7 @@ Vector3 Transform(const Vector3& vector, const Matrix4x4& matrix) {
 }
 
 // アフィン変換a
-Matrix4x4 MakeAffineMatrix(const Vector3& scale, const Vector3& rotate, const Vector3& translate) {
+inline Matrix4x4 MakeAffineMatrix(const Vector3& scale, const Vector3& rotate, const Vector3& translate) {
 
 	Matrix4x4 makeRotateXMatrix = RotationX(rotate.x);
 	Matrix4x4 makeRotateYMatrix = RotationY(rotate.y);

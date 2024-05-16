@@ -1,8 +1,4 @@
 #include "GameScene.h"
-#include "Player.h"
-#include "TextureManager.h"
-#include <cassert>
-#include <mt3.h>
 
 GameScene::GameScene() {
 	
@@ -14,6 +10,7 @@ GameScene::~GameScene() {
 	delete player_;
 	delete modelBlock_;
 	delete debugCamera_;
+	delete modelSkydome_;
 	for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_) {
 		for (WorldTransform* worldTransformBlocks : worldTransformBlockLine) {
 			delete worldTransformBlocks;
@@ -61,6 +58,9 @@ void GameScene::Initialize() {
 	}
 
 	debugCamera_ = new DebugCamera(WinApp::kWindowWidth, WinApp::kWindowHeight);
+
+	skydome_ = new Skydome();
+	modelSkydome_ = Model::CreateFromOBJ("Skydome", true);
 }
 
 void GameScene::Update() { 

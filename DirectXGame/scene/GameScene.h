@@ -1,16 +1,19 @@
 #pragma once
 
 #include "Audio.h"
+#include "DebugCamera.h"
 #include "DirectXCommon.h"
 #include "Input.h"
+#include "mt3.h"
 #include "Model.h"
+#include "Skydome.h"
 #include "Sprite.h"
 #include "ViewProjection.h"
 #include "WorldTransform.h"
-#include "Player.h"
 #include <vector>
-#include"DebugCamera.h"
-
+#include "Player.h"
+#include "TextureManager.h"
+#include <cassert>
 
 /// <summary>
 /// ゲームシーン
@@ -25,7 +28,7 @@ public: // メンバ関数
 	Model* model_ = nullptr;
 	WorldTransform worldTransform_;
 	ViewProjection viewProjection_;
-	
+
 	/// <summary>
 	/// デストラクタ
 	/// </summary>
@@ -59,7 +62,6 @@ private: // メンバ変数
 	std::vector<std::vector<WorldTransform*>> worldTransformBlocks_;
 	bool isDebugCameraActive_ = false;
 	DebugCamera* debugCamera_ = nullptr;
-	/// <summary>
-	/// ゲームシーン用
-	/// </summary>
+	Skydome* skydome_ = nullptr;
+	Model* modelSkydome_ = nullptr;
 };
