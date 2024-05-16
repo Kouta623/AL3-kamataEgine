@@ -9,6 +9,8 @@
 #include "WorldTransform.h"
 #include "Player.h"
 #include <vector>
+#include"DebugCamera.h"
+
 
 /// <summary>
 /// ゲームシーン
@@ -55,7 +57,8 @@ private: // メンバ変数
 	Model* modelBlock_ = nullptr;
 	uint32_t blockTextureHandle_ = 0u;
 	std::vector<std::vector<WorldTransform*>> worldTransformBlocks_;
-
+	bool isDebugCameraActive_ = false;
+	DebugCamera* debugCamera_ = nullptr;
 	/// <summary>
 	/// ゲームシーン用
 	/// </summary>

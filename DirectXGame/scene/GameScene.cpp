@@ -5,13 +5,15 @@
 #include <mt3.h>
 
 GameScene::GameScene() {
-	delete model_;
-	delete player_;
-	delete modelBlock_;
-
+	
+	
 }
 
 GameScene::~GameScene() {
+	delete model_;
+	delete player_;
+	delete modelBlock_;
+	delete debugCamera_;
 	for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_) {
 		for (WorldTransform* worldTransformBlocks : worldTransformBlockLine) {
 			delete worldTransformBlocks;
@@ -57,6 +59,8 @@ void GameScene::Initialize() {
 			worldTransformBlocks_[i][j]->translation_.y = kBlockHight*i;
 		}
 	}
+
+	debugCamera_ = new DebugCamera(WinApp::kWindowWidth, WinApp::kWindowHeight);
 }
 
 void GameScene::Update() { 
@@ -73,6 +77,23 @@ void GameScene::Update() {
 		}
 	}
 	
+	
+
+	#ifdef _DEBUG
+	if (input_->TriggerKey(DIK_SPACE)) {
+		isDebugCameraActive_^=true;
+	}
+#endif // DEBUG
+
+	if (isDebugCameraActive_) {
+		debugCamera_->Update();
+		viewProjection_.matView = debugCamera_->GetViewProjection().matView;
+		viewProjection_.matProjection = debugCamera_->GetViewProjection().matProjection;
+		viewProjection_.TransferMatrix();
+	} else {
+		viewProjection_.UpdateMatrix();
+	}
+
 }
 
 void GameScene::Draw() {
