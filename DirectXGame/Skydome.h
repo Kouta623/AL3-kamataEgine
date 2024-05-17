@@ -15,7 +15,7 @@ public:
 
 private:
 	WorldTransform worldTransform_;
-	ViewProjection *viewProjection_ = nullptr;
+	ViewProjection *viewProjection_;
 
 	Model* model_ = nullptr;
 };
