@@ -1,9 +1,6 @@
 #include "GameScene.h"
 
-GameScene::GameScene() {
-	
-	
-}
+GameScene::GameScene() {}
 
 GameScene::~GameScene() {
 	delete model_;
@@ -17,7 +14,7 @@ GameScene::~GameScene() {
 			delete worldTransformBlocks;
 		}
 	}
-		
+
 	worldTransformBlocks_.clear();
 }
 
@@ -46,15 +43,15 @@ void GameScene::Initialize() {
 	// 要素数の変更
 	worldTransformBlocks_.resize(kNumBlockVirtical);
 	// キューブの生成
-	for (uint32_t i = 0;i< kNumBlockVirtical; ++i) {
+	for (uint32_t i = 0; i < kNumBlockVirtical; ++i) {
 		worldTransformBlocks_[i].resize(kNumBlockHorizontal);
 	}
-	for (uint32_t i = 0; i<kNumBlockVirtical; ++i) {
-		for (uint32_t j = 0; j<kNumBlockHorizontal; j+=2) {
+	for (uint32_t i = 0; i < kNumBlockVirtical; ++i) {
+		for (uint32_t j = 0; j < kNumBlockHorizontal; j += 2) {
 			worldTransformBlocks_[i][j] = new WorldTransform();
 			worldTransformBlocks_[i][j]->Initialize();
 			worldTransformBlocks_[i][j]->translation_.x = kBlockWidth * j;
-			worldTransformBlocks_[i][j]->translation_.y = kBlockHight*i;
+			worldTransformBlocks_[i][j]->translation_.y = kBlockHight * i;
 		}
 	}
 
@@ -63,13 +60,39 @@ void GameScene::Initialize() {
 	modelSkydome_ = Model::CreateFromOBJ("Skydome", true);
 	skydome_ = new Skydome();
 	skydome_->Initialize(modelSkydome_, &viewProjection_);
+
+	// マップチップ
+	mapChipField_ = new MapchipField;
+	mapChipField_->LoadMapChipCsv("Resources/blocks.csv");
+
+	GenerateBlocks();
+	// 要素数
+	const uint32_t numBlockVirtical = mapChipField_->GetNumBlockVirtical();
+	const uint32_t numBlockHorizontal = mapChipField_->GetNumBlockHorizontal();
+	// ブロックい1つの横幅
+	const float kBlockWidth = 2.0f;
+	const float kBlockHight = 2.0f;
+	// 要素数の変更
+	worldTransformBlocks_.resize(kNumBlockVirtical);
+	// キューブの生成
+	for (uint32_t i = 0; i < kNumBlockVirtical; ++i) {
+		worldTransformBlocks_[i].resize(kNumBlockHorizontal);
+	}
+	for (uint32_t i = 0; i < kNumBlockVirtical; ++i) {
+		for (uint32_t j = 0; j < kNumBlockHorizontal; j += 2) {
+			worldTransformBlocks_[i][j] = new WorldTransform();
+			worldTransformBlocks_[i][j]->Initialize();
+			worldTransformBlocks_[i][j]->translation_.x = kBlockWidth * j;
+			worldTransformBlocks_[i][j]->translation_.y = kBlockHight * i;
+		}
+	}
 }
 
-void GameScene::Update() { 
+
+void GameScene::Update() {
 
 	skydome_->Update();
-	player_->Update(); 
-
+	player_->Update();
 
 	for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_) {
 		for (WorldTransform* worldTransformBlocks : worldTransformBlockLine) {
@@ -79,12 +102,10 @@ void GameScene::Update() {
 			worldTransformBlocks->TransferMatrix();
 		}
 	}
-	
-	
 
-	#ifdef _DEBUG
+#ifdef _DEBUG
 	if (input_->TriggerKey(DIK_SPACE)) {
-		isDebugCameraActive_^=true;
+		isDebugCameraActive_ ^= true;
 	}
 #endif // DEBUG
 
@@ -96,7 +117,6 @@ void GameScene::Update() {
 	} else {
 		viewProjection_.UpdateMatrix();
 	}
-
 }
 
 void GameScene::Draw() {
@@ -130,7 +150,6 @@ void GameScene::Draw() {
 			if (!worldTransformBlocks)
 				continue;
 			modelBlock_->Draw(*worldTransformBlocks, viewProjection_);
-
 		}
 	}
 	//
@@ -155,3 +174,5 @@ void GameScene::Draw() {
 
 #pragma endregion
 }
+
+void GameScene::GenerateBlocks() {}
