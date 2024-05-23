@@ -46,6 +46,10 @@ void GameScene::Initialize() {
 	mapChipField_->LoadMapChipCsv("Resources/blocks.csv");
 
 	GenerateBlocks();
+
+	//プレイヤ配置
+	Vector3 playerPosition = mapChipField_->GetMapChipPositionByIndex(19, 2);
+	player_->Initialize(model_, &viewProjection_, playerPosition);
 }
 
 void GameScene::Update() {
