@@ -4,6 +4,14 @@
 #include "Input.h"
 #include <cassert>
 #include<numbers>
+#include<algorithm>
+
+
+enum class LRDirection {
+	kRight,
+	kLeft,
+};
+
 class Player {
 public:
 	Player();
@@ -34,4 +42,9 @@ private:
 	ViewProjection* viewProjection_ = nullptr;
 	Vector3 velocity_ = {};
 	static inline const float kAcceleration = 20;
+	static inline const float kAttenuation = 20;
+	static inline const float kLimitRunSpeed = 20;
+
+	LRDirection lrDirecton = LRDirection::kRight;
+
 };

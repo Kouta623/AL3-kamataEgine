@@ -21,15 +21,26 @@ void Player::Update() {
 
 		// 左右加速
 		Vector3 acceleration = {};
-		if (Input::GetInstance()->PushKey(DIK_RIGHT)) {
+		if (Input::GetInstance()->PushKey(DIK_RIGHT)){
+			if (velocity_.x < 0.0f) {
+				velocity_.x *= (1.0f - kAttenuation);
+			}
 			acceleration.x += kAcceleration;
 		} 
 		else if(Input::GetInstance()->PushKey(DIK_LEFT)){
+			if (velocity_.x < 0.0f) {
+				velocity_.x *= (1.0f - kAttenuation);
+			}
 			acceleration.x -= kAcceleration;
 		}
 		//加減速
 		velocity_+=acceleration;
+
+		//最大速度制限
+		velocity_.x = std::clamp(velocity_.x, -kLimitRunSpeed, kLimitRunSpeed);
 	
+	} else {
+		velocity_.x *= (1.0f - kAttenuation);
 	}
 	// 移動
 	worldTransform_.translation_ = velocity_;
