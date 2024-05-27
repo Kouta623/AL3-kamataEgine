@@ -30,7 +30,6 @@ void GameScene::Initialize() {
 	viewProjection_.Initialize();
 
 	player_ = new Player();
-	player_->Initialize(model_, textureHandle_, &viewProjection_);
 
 	modelBlock_ = Model::Create();
 	blockTextureHandle_ = TextureManager::Load("cube/cube.jpg");
@@ -48,8 +47,8 @@ void GameScene::Initialize() {
 	GenerateBlocks();
 
 	//プレイヤ配置
-	Vector3 playerPosition = mapChipField_->GetMapChipPositionByIndex(19, 2);
-	player_->Initialize(model_, &viewProjection_, playerPosition);
+	Vector3 playerPosition = mapChipField_->GetMapChipPositionByIndex(2, 18);
+	player_->Initialize(model_,textureHandle_, &viewProjection_, playerPosition);
 }
 
 void GameScene::Update() {
@@ -105,7 +104,7 @@ void GameScene::Draw() {
 	// 3Dオブジェクト描画前処理
 	Model::PreDraw(commandList);
 	player_->Draw();
-	model_->Draw(worldTransform_, viewProjection_, textureHandle_);
+//	model_->Draw(worldTransform_, viewProjection_, textureHandle_);
 	skydome_->Draw();
 
 	for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_) {

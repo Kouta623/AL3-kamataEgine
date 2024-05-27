@@ -1,17 +1,7 @@
+#pragma once
 #include<math.h>
 #include<assert.h>
 //#include <Novice.h>
-#include <stdio.h>
-#include <Vector3.h>
-#include <Vector4.h>
-#include <Matrix4x4.h>
-
-
-
-static const int kRowHeight = 20;
-static const int kColumnWidth = 60;
-
-
 
 //
 //struct Vector3 {

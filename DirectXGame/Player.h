@@ -12,6 +12,7 @@ enum class LRDirection {
 	kLeft,
 };
 
+	LRDirection lrDirecton_ = LRDirection::kRight;
 class Player {
 public:
 	Player();
@@ -22,7 +23,7 @@ public:
 	/// </summary>
 	/// <param name="model">モデル</param>
 	/// <param name="textureHandle">テクスチャーハンドル</param>
-	void Initialize(Model* model, ViewProjection* viewProjection,const Vector3& position);
+	void Initialize(Model* model, uint32_t textureHandle ,ViewProjection* viewProjection, const Vector3& position);
 
 	/// <summary>
 	/// アップデート
@@ -41,10 +42,9 @@ private:
 	uint32_t textureHandle_ = 0u;
 	ViewProjection* viewProjection_ = nullptr;
 	Vector3 velocity_ = {};
-	static inline const float kAcceleration = 20;
-	static inline const float kAttenuation = 20;
-	static inline const float kLimitRunSpeed = 20;
+	static inline const float kAcceleration = 0.04f;
+	static inline const float kAttenuation = 0.3f;
+	static inline const float kLimitRunSpeed = 1.0f;
 
-	LRDirection lrDirecton = LRDirection::kRight;
 
 };
