@@ -1,8 +1,8 @@
 #pragma once
+#include <Vector3.h>
 #include <iostream>
-#include<vector>
-#include<string>
-#include<Vector3.h>
+#include <string>
+#include <vector>
 
 enum class MapChipType {
 	kBlank,
@@ -13,10 +13,9 @@ struct MapchipData {
 	std::vector<std::vector<MapChipType>> data;
 };
 
-
 class MapchipField {
 
-	public:
+public:
 	void ResetMapChipData();
 	void LoadMapChipCsv(const std::string& filePath);
 	MapChipType GetMapChipTypeByIndex(uint32_t xIndex, uint32_t yIndex);
@@ -24,9 +23,9 @@ class MapchipField {
 	int GetNumBlockVirtical();
 	int GetNumBlockHorizontal();
 
-	private:
+private:
 	static inline const float kBlockWidth = 2.0f;
-    static inline const float kBlockHeight = 2.0f;
+	static inline const float kBlockHeight = 2.0f;
 
 	static inline const uint32_t kNumBlockVirtical = 20;
 	static inline const uint32_t kNumBlockHorizontal = 100;

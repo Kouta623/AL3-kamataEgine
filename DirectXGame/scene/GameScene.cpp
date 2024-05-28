@@ -9,6 +9,7 @@ GameScene::~GameScene() {
 	delete modelBlock_;
 	delete debugCamera_;
 	delete modelSkydome_;
+	delete mapChipField_;
 	for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_) {
 		for (WorldTransform* worldTransformBlocks : worldTransformBlockLine) {
 			delete worldTransformBlocks;

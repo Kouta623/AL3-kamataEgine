@@ -26,9 +26,6 @@ public: // メンバ関数
 	/// コンストクラタ
 	/// </summary>
 	GameScene();
-	Model* model_ = nullptr;
-	WorldTransform worldTransform_;
-	ViewProjection viewProjection_;
 
 	/// <summary>
 	/// デストラクタ
@@ -54,6 +51,10 @@ public: // メンバ関数
 	void GenerateBlocks();
 
 private: // メンバ変数
+	Model* model_ = nullptr;
+	WorldTransform worldTransform_;
+	ViewProjection viewProjection_;
+
 	DirectXCommon* dxCommon_ = nullptr;
 	Input* input_ = nullptr;
 	Audio* audio_ = nullptr;
