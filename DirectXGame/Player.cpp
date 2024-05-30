@@ -31,6 +31,11 @@ void Player::Update() {
 
 					lrDirecton_ = LRDirection::kRight;
 				}
+				//左右状態切り替え
+			    trunFirstRotatiocY_ = 0.0f;
+			    trunTime_ = kTimaeTurn;
+
+
 		} else if (Input::GetInstance()->PushKey(DIK_LEFT)) {
 			if (velocity_.x > 0.0f) {
 				velocity_.x *= (1.0f - kAttenuation);
@@ -40,6 +45,9 @@ void Player::Update() {
 
 					lrDirecton_ = LRDirection::kLeft;
 				}
+			    // 左右状態切り替え
+			    trunFirstRotatiocY_ = 0.0f;
+			    trunTime_ = kTimaeTurn;
 		}
 
 		// 加減速
@@ -67,6 +75,21 @@ void Player::Update() {
 	worldTransform_.translation_ += velocity_;
 	// 行列計算
 	worldTransform_.UpdataMatrix();
+
+	//旋回制御
+	if (trunTime_ > 0.0f) {
+
+		trunTime_ -= 1 / 60;
+
+		//左右自キャラ角度テーブル
+		float destinationRotationYTable[] = {std::numbers::pi_v<float> / 2.0f, std::numbers::pi_v<float> * 3.0f / 2.0f};
+	//状態に応じた目標角度を取得
+		float destinationRotationY = destinationRotationYTable[static_cast<uint32_t>(lrDirecton_)];
+		//自キャラ角度を設定
+		worldTransform_.rotation_.y=
+	
+	}
+
 }
 
 void Player::Draw() { model_->Draw(worldTransform_, *viewProjection_, textureHandle_); }
