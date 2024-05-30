@@ -48,10 +48,10 @@ private:
 	static inline const float kLimitRunSpeed = 1.0f;
 
 	//旋回開始時角度
-	float trunFirstRotatiocY_ = 0.0f;
+	float trunFirstRotationY_ = 0.0f;
 	//旋回タイマー
 	float trunTime_ = 0.0f;
 	//旋回時間<秒>
-	static inline const float kTimaeTurn = 0.3f;
+	static inline const float kTimaeTurn = 1.0f;
 	
 };

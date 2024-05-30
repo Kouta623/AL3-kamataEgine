@@ -32,7 +32,7 @@ void Player::Update() {
 					lrDirecton_ = LRDirection::kRight;
 				}
 				//左右状態切り替え
-			    trunFirstRotatiocY_ = 0.0f;
+			    trunFirstRotationY_ = worldTransform_.rotation_.y;
 			    trunTime_ = kTimaeTurn;
 
 
@@ -46,7 +46,7 @@ void Player::Update() {
 					lrDirecton_ = LRDirection::kLeft;
 				}
 			    // 左右状態切り替え
-			    trunFirstRotatiocY_ = 0.0f;
+			    trunFirstRotationY_ = worldTransform_.rotation_.y;
 			    trunTime_ = kTimaeTurn;
 		}
 
