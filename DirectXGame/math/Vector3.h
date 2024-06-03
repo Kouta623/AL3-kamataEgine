@@ -16,4 +16,5 @@ struct Vector3 final {
 
 		return *this;
 	}
+
 };

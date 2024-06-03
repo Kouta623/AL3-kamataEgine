@@ -13,6 +13,7 @@ void Player::Initialize(Model* model, uint32_t textureHandle, ViewProjection* vi
 	worldTransform_.translation_ = position;
 	worldTransform_.rotation_.y = std::numbers::pi_v<float> * 3.0f / 2.0f;
 	textureHandle;
+
 }
 
 void Player::Update() {

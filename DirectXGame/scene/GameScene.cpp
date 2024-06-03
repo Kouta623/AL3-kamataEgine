@@ -50,6 +50,10 @@ void GameScene::Initialize() {
 	//プレイヤ配置
 	Vector3 playerPosition = mapChipField_->GetMapChipPositionByIndex(2, 18);
 	player_->Initialize(model_,textureHandle_, &viewProjection_, playerPosition);
+
+	//カメラコントロール
+	cameraController_ = new CameraController;
+	cameraController_->Initialize();
 }
 
 void GameScene::Update() {

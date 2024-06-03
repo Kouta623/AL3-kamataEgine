@@ -6,6 +6,7 @@
 #include <algorithm>
 #include <cassert>
 #include <numbers>
+#include<ViewProjection.h>
 
 enum class LRDirection {
 	kRight,
@@ -34,6 +35,8 @@ public:
 	/// 描画
 	/// </summary>
 	void Draw();
+
+	WorldTransform& GetWorldTransform() { return worldTransform_; }
 
 private:
 	WorldTransform worldTransform_;

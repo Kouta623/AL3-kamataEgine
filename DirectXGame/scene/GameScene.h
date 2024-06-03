@@ -15,6 +15,7 @@
 #include "TextureManager.h"
 #include <cassert>
 #include "MapchipField.h"
+#include "CameraController.h"
 
 /// <summary>
 /// ゲームシーン
@@ -72,5 +73,7 @@ private: // メンバ変数
 
 	//マップチップフィールド
 	MapchipField* mapChipField_;
+	//カメラコントロール
+	CameraController* cameraController_;
 	
 };
