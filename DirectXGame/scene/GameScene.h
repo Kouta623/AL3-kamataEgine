@@ -76,4 +76,5 @@ private: // メンバ変数
 	//カメラコントロール
 	CameraController* cameraController_;
 	
+	Rect movebleArea_ = {};
 };

@@ -52,8 +52,13 @@ void GameScene::Initialize() {
 	player_->Initialize(model_,textureHandle_, &viewProjection_, playerPosition);
 
 	//カメラコントロール
+	movebleArea_ = {9.5f, 186.5f, 5.0f, 50.0f};
 	cameraController_ = new CameraController;
 	cameraController_->Initialize();
+	cameraController_->SetTarget(player_);
+	cameraController_->Reset();
+	cameraController_->SetMoveableArea(movebleArea_);
+
 }
 
 void GameScene::Update() {
@@ -84,6 +89,11 @@ void GameScene::Update() {
 	} else {
 		viewProjection_.UpdateMatrix();
 	}
+	cameraController_->Update();
+
+	viewProjection_.matView = cameraController_->GetViewProjection().matView;
+	viewProjection_.matProjection = cameraController_->GetViewProjection().matProjection;
+	viewProjection_.TransferMatrix();
 }
 
 void GameScene::Draw() {
