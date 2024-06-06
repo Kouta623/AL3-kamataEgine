@@ -32,7 +32,9 @@ private:
 	ViewProjection viewProjection_;
 	Player* target_ = nullptr;
 	Vector3 targetoffset_ = {0, 0, -15.0f};
-
+	Vector3 goalPos_={};
+	static inline const float kInterpolationRate = 0.5f;
+	static inline const float kVelocityBias = 10;
 	//矩形
 	Rect movebleArea_ = {0, 100, 0, 100};
 };

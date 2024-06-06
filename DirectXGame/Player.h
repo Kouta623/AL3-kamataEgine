@@ -37,7 +37,10 @@ public:
 	void Draw();
 
 	WorldTransform& GetWorldTransform() { return worldTransform_; }
+	//速度加算
+	const Vector3& GetVelocity() const { return velocity_; }
 
+	
 private:
 	WorldTransform worldTransform_;
 	Model* model_ = nullptr;
@@ -66,4 +69,5 @@ private:
 	static inline const float kLimitFallSpeed = 1.0f;
 	//ジャンプ初速
 	static inline const float kJumpAcceleration = 2.0f;
+
 };

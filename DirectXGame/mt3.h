@@ -186,3 +186,5 @@ inline Matrix4x4 MakeAffineMatrix(const Vector3& scale, const Vector3& rotate, c
 
 	return Multiply(Multiply(matScale, makeRotate), matTranslate);
 }
+
+inline float Larp(const float& a, const float& b, const float& t) { return t * a + (1.0f - t) * b; }
