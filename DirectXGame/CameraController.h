@@ -14,6 +14,7 @@ public:
 
 	void Reset();
 
+	/*void SetMoveableArea() {movebleArea_=}*/
 	
 
 private:
@@ -22,4 +23,14 @@ private:
 	void SetTarget(Player* target) { target_ = target; }
 	Vector3 targetoffset_ = {0, 0, -15.0f};
 
+	////矩形
+	//struct Rect {
+	//
+	//	float left = 0.0f;
+	//	float right = 1.0f;
+	//	float bottom = 0.0f;
+	//	float top = 1.0f;
+	//
+	//};
+	//Rect movebleArea_ = {0, 100, 0, 100};
 };
