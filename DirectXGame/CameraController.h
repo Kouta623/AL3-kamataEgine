@@ -34,7 +34,9 @@ private:
 	Vector3 targetoffset_ = {0, 0, -15.0f};
 	Vector3 goalPos_={};
 	static inline const float kInterpolationRate = 0.5f;
-	static inline const float kVelocityBias = 10;
+	static inline const float kVelocityBias = 5;
 	//矩形
 	Rect movebleArea_ = {0, 100, 0, 100};
+	//カメラ移動範囲
+	static inline const Rect merge = {-5.0f, 5.0f, 3.0f, 50.0f};
 };
