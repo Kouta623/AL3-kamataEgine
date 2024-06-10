@@ -3,16 +3,36 @@
 #include "Input.h"
 #include "Model.h"
 #include "WorldTransform.h"
+#include <ViewProjection.h>
 #include <algorithm>
 #include <cassert>
 #include <numbers>
-#include<ViewProjection.h>
+#include"MapchipField.h"
+class MapchipField;
 
 enum class LRDirection {
 	kRight,
 	kLeft,
 };
 
+struct CollisionMapInfo {
+
+	bool ceiling = false;
+	bool onGuround = false;
+	bool hitwall = false;
+	Vector3 move;
+};
+
+ enum Corner {
+
+	kRifhtBottom, // 右上
+	kLeftBottom,  // 左下
+	kRightTop,    // 右上
+	kLeftTop,     // 左上
+
+	kNumCorner
+
+};
 
 class Player {
 public:
@@ -37,11 +57,24 @@ public:
 	void Draw();
 
 	WorldTransform& GetWorldTransform() { return worldTransform_; }
-	//速度加算
+	// 速度加算
 	const Vector3& GetVelocity() const { return velocity_; }
 
-	
+	void SetMapchipField(MapchipField* mapChipField) { mapChipField_ = mapChipField; }
+
+		// キャラクター当たり判定
+
+	static inline const float kWidth = 0.8f;
+	static inline const float kHeight = 0.8f;
+
 private:
+	void CollisionMap(CollisionMapInfo& info);
+	void CollisionMapTop(CollisionMapInfo& info);
+	void CollisionMapBottom(CollisionMapInfo& info);
+	void CollisionMapRight(CollisionMapInfo& info);
+	void CollisionMapLeft(CollisionMapInfo& info);
+
+
 	WorldTransform worldTransform_;
 	Model* model_ = nullptr;
 	uint32_t textureHandle_ = 0u;
@@ -54,20 +87,21 @@ private:
 	static inline const float kAttenuation = 0.3f;
 	static inline const float kLimitRunSpeed = 1.0f;
 
-	//旋回開始時角度
+	// 旋回開始時角度
 	float trunFirstRotationY_ = 0.0f;
-	//旋回タイマー
+	// 旋回タイマー
 	float trunTime_ = 0.0f;
-	//旋回時間<秒>
+	// 旋回時間<秒>
 	static inline const float kTimaeTurn = 1.0f;
-	
-	//着地フラグ
-	bool onGround_ = true;
-	//重力加速度
-	static inline const float kGravityAcceleration = 0.2f;
-	//最大落下速度
-	static inline const float kLimitFallSpeed = 1.0f;
-	//ジャンプ初速
-	static inline const float kJumpAcceleration = 2.0f;
 
+	// 着地フラグ
+	bool onGround_ = true;
+	// 重力加速度
+	static inline const float kGravityAcceleration = 0.2f;
+	// 最大落下速度
+	static inline const float kLimitFallSpeed = 1.0f;
+	// ジャンプ初速
+	static inline const float kJumpAcceleration = 2.0f;
+	// マップチップによるフィールド
+	MapchipField* mapChipField_ = nullptr;
 };

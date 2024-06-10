@@ -13,10 +13,10 @@ void Player::Initialize(Model* model, uint32_t textureHandle, ViewProjection* vi
 	worldTransform_.translation_ = position;
 	worldTransform_.rotation_.y = std::numbers::pi_v<float> * 3.0f / 2.0f;
 	textureHandle;
-
 }
 
 void Player::Update() {
+
 	worldTransform_.TransferMatrix();
 	if (onGround_) {
 		// 移動入力
@@ -95,32 +95,91 @@ void Player::Update() {
 			worldTransform_.translation_.y = 2.0f;
 			// 摩擦で横方向速度が減衰
 			velocity_.x *= (1.0f - kAttenuation);
-			//下方向速度をリセット
+			// 下方向速度をリセット
 			velocity_.y = 0.0f;
-			//接着状態に移行
+			// 接着状態に移行
 			onGround_ = true;
 		}
 	}
 
-	// 旋回制御
+	//
+	CollisionMapInfo info;
+	info.move = velocity_;
+	CollisionMap(info);
+	worldTransform_.translation_ += velocity_;
+
+	// 7 旋回制御
 	if (trunTime_ > 0.0f) {
 
 		trunTime_ -= 5.0f / 60.0f;
 
 		// 左右自キャラ角度テーブル
-		float destinationRotationYTable[] = {
-			std::numbers::pi_v<float> / 2.0f, 
-			std::numbers::pi_v<float> * 3.0f / 2.0f};
+		float destinationRotationYTable[] = {std::numbers::pi_v<float> / 2.0f, std::numbers::pi_v<float> * 3.0f / 2.0f};
 		// 状態に応じた目標角度を取得
 		float destinationRotationY = destinationRotationYTable[static_cast<uint32_t>(lrDirecton_)];
 		// 自キャラ角度を設定
 		worldTransform_.rotation_.y = (1.0f - trunTime_) * destinationRotationY + trunTime_ * trunFirstRotationY_;
 	}
 
-			// 移動
+	// 移動
 	worldTransform_.translation_ += velocity_;
 
 	worldTransform_.UpdataMatrix();
 }
 
 void Player::Draw() { model_->Draw(worldTransform_, *viewProjection_, textureHandle_); }
+
+Vector3 CollisionPosition(const Vector3& center, Corner corner);
+
+Vector3 CollisionPosition(const Vector3& center, Corner corner) {
+	Vector3 offsetTable[kNumCorner] = {
+
+	    {+Player::kWidth / 2.0f, -Player::kHeight / 2.0f, 0},
+	    {-Player::kWidth / 2.0f, -Player::kHeight / 2.0f, 0},
+	    {+Player::kWidth / 2.0f, +Player::kHeight / 2.0f, 0},
+	    {-Player::kWidth / 2.0f, +Player::kHeight / 2.0f, 0},
+	};
+}
+void Player::CollisionMap(CollisionMapInfo& info) {
+
+	CollisionMapTop(info);
+	CollisionMapBottom(info);
+	CollisionMapRight(info);
+	CollisionMapLeft(info);
+}
+
+void Player::CollisionMapTop(CollisionMapInfo& info) {
+
+	if (info.move.y <= 0) {
+		return;
+	}
+	std::array<Vector3, static_cast<uint32_t>(Corner :: kNumCorner)> positonsNew;
+	for (uint32_t i = 0; i < positonsNew.size(); i++) {
+		positonsNew[i] = CollisionPosition(worldTransform_.translation_ + info.move, static_cast<Corner>(i));
+	}
+
+	MapChipType mapChipType;
+	bool hit = false;
+
+	IndexSet indexSet;
+	indexSet = mapChipField_->GetMapchipIndexsetByPosition(positonsNew[int(Corner::kLeftTop)]);
+	mapChipType = mapChipField_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex);
+	if (mapChipType == MapChipType::kBlank) {
+		hit = true;
+	}
+
+	IndexSet indexSet;
+	indexSet = mapChipField_->GetMapchipIndexsetByPosition(positonsNew[int(Corner::kRightTop)]);
+	mapChipType = mapChipField_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex);
+	if (mapChipType == MapChipType::kBlank) {
+		hit = true;
+	}
+}
+
+void Player::CollisionMapBottom(CollisionMapInfo& info) {}
+
+void Player::CollisionMapRight(CollisionMapInfo& info) {}
+
+void Player::CollisionMapLeft(CollisionMapInfo& info) {}
+
+

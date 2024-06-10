@@ -88,3 +88,18 @@ Vector3 MapchipField::GetMapChipPositionByIndex(uint32_t xIndex, uint32_t yIndex
 int MapchipField::GetNumBlockVirtical() { return kNumBlockVirtical; }
 
 int MapchipField::GetNumBlockHorizontal() { return kNumBlockHorizontal; }
+
+IndexSet MapchipField::GetMapchipIndexsetByPosition(const Vector3& position) { 
+
+	uint32_t xindex = static_cast<uint32_t>((position.x + kBlockWidth / 2) / kBlockWidth);
+	uint32_t yindex = static_cast<uint32_t>((position.y + kBlockHeight / 2) / kBlockHeight);
+	int32_t maxIndexY = kNumBlockVirtical - 1;
+	yindex = maxIndexY - yindex;
+	
+
+	IndexSet indexSet;
+	indexSet.xIndex = xindex;
+	indexSet.yIndex = yindex;
+
+	return indexSet; 
+}
