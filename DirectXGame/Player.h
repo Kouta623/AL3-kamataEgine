@@ -61,11 +61,19 @@ public:
 	const Vector3& GetVelocity() const { return velocity_; }
 
 	void SetMapchipField(MapchipField* mapChipField) { mapChipField_ = mapChipField; }
+	
 
 		// キャラクター当たり判定
 
 	static inline const float kWidth = 0.8f;
 	static inline const float kHeight = 0.8f;
+
+	static inline const float kBlank = 0.1f;
+
+	// 判定結果を判定して移動させる
+	void JudgmenResultMove(const CollisionMapInfo& info);
+	//天井接触
+	void CeilingContact(const CollisionMapInfo& info);
 
 private:
 	void CollisionMap(CollisionMapInfo& info);

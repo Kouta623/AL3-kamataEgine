@@ -3,6 +3,12 @@
 #include<WorldTransform.h>
 #include <Vector3.h>
 
+
+class Player;
+
+class CameraController {
+
+public:
 	struct Rect {
 	
 		float left = 0.0f;
@@ -11,12 +17,6 @@
 		float top = 1.0f;
 	
 	};
-
-class Player;
-
-class CameraController {
-
-public:
 	void Initialize();
 
 	void Update();

@@ -129,6 +129,7 @@ void Player::Update() {
 
 void Player::Draw() { model_->Draw(worldTransform_, *viewProjection_, textureHandle_); }
 
+
 //Vector3 CollisionPosition(const Vector3& center, Corner corner);
 
 Vector3 CollisionPosition(const Vector3& center, Corner corner) {
@@ -139,6 +140,8 @@ Vector3 CollisionPosition(const Vector3& center, Corner corner) {
 	    {+Player::kWidth / 2.0f, +Player::kHeight / 2.0f, 0},
 	    {-Player::kWidth / 2.0f, +Player::kHeight / 2.0f, 0},
 	};
+
+	return center + offsetTable[static_cast<uint32_t>(corner)];
 }
 void Player::CollisionMap(CollisionMapInfo& info) {
 
@@ -166,14 +169,14 @@ void Player::CollisionMapTop(CollisionMapInfo& info) {
 	bool hit = false;
 	//左上
 	IndexSet lefIndexSet;
-	lefIndexSet = mapChipField_->GetMapchipIndexsetByPosition(positonsNew[int(Corner::kLeftTop)]);
+	lefIndexSet = mapChipField_->GetMapchipIndexsetByPosition(positonsNew[kLeftTop]);
 	mapChipType = mapChipField_->GetMapChipTypeByIndex(lefIndexSet.xIndex, lefIndexSet.yIndex);
 	if (mapChipType == MapChipType::kBlank) {
 		hit = true;
 	}
 	//右上
 	IndexSet RightIndexSet;
-	RightIndexSet = mapChipField_->GetMapchipIndexsetByPosition(positonsNew[int(Corner::kRightTop)]);
+	RightIndexSet = mapChipField_->GetMapchipIndexsetByPosition(positonsNew[kRightTop]);
 	mapChipType = mapChipField_->GetMapChipTypeByIndex(RightIndexSet.xIndex, RightIndexSet.yIndex);
 	if (mapChipType == MapChipType::kBlank) {
 		hit = true;
@@ -181,19 +184,31 @@ void Player::CollisionMapTop(CollisionMapInfo& info) {
 
 	if (hit) {
 	
-		IndexSet = mapChipField_->GetMapchipIndexsetByPosition(top);
-		MapchipField::Rect rect = mapChipField_->GetRectByIndex(indexSet.xindex, IndexSet.yindex);
-		info.move.y = std::max(0.0f, );
+		IndexSet indexSet = mapChipField_->GetMapchipIndexsetByPosition(positonsNew[kRightTop]);
+		Rect rect = mapChipField_->GetRectByIndex(indexSet.xIndex, indexSet.yIndex);
+		info.move.y = std::max(0.0f,rect.bottom -worldTransform_.translation_.y,indexSet.yIndex);
 		info.hitwall = true;
 
 	}
 }
-//#pragma warning(push)
-//#pragma warning(disable : 4100)
+#pragma warning(push)
+#pragma warning(disable : 4100)
 void Player::CollisionMapBottom(CollisionMapInfo& info) {}
 
 void Player::CollisionMapRight(CollisionMapInfo& info) {}
 
 void Player::CollisionMapLeft(CollisionMapInfo& info) {}
-//#pragma warning(pop)
+#pragma warning(pop)
 
+
+void Player::JudgmenResultMove(const CollisionMapInfo& info) {
+
+	// 移動
+	worldTransform_.translation_ += velocity_;
+}
+
+void Player::CeilingContact(const CollisionMapInfo& info) {
+
+	velocity_.y = 0;
+
+}
