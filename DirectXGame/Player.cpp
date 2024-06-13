@@ -129,7 +129,7 @@ void Player::Update() {
 
 void Player::Draw() { model_->Draw(worldTransform_, *viewProjection_, textureHandle_); }
 
-Vector3 CollisionPosition(const Vector3& center, Corner corner);
+//Vector3 CollisionPosition(const Vector3& center, Corner corner);
 
 Vector3 CollisionPosition(const Vector3& center, Corner corner) {
 	Vector3 offsetTable[kNumCorner] = {
@@ -155,31 +155,45 @@ void Player::CollisionMapTop(CollisionMapInfo& info) {
 	}
 	std::array<Vector3, static_cast<uint32_t>(Corner :: kNumCorner)> positonsNew;
 	for (uint32_t i = 0; i < positonsNew.size(); i++) {
-		positonsNew[i] = CollisionPosition(worldTransform_.translation_ + info.move, static_cast<Corner>(i));
+		Vector3 result;
+		result.x = worldTransform_.translation_.x + info.move.x;
+		result. y = worldTransform_.translation_.y+ info.move.y;
+		result.z = worldTransform_.translation_.z + info.move.z;
+		positonsNew[i] = CollisionPosition(result, static_cast<Corner>(i));
 	}
 
 	MapChipType mapChipType;
 	bool hit = false;
-
-	IndexSet indexSet;
-	indexSet = mapChipField_->GetMapchipIndexsetByPosition(positonsNew[int(Corner::kLeftTop)]);
-	mapChipType = mapChipField_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex);
+	//左上
+	IndexSet lefIndexSet;
+	lefIndexSet = mapChipField_->GetMapchipIndexsetByPosition(positonsNew[int(Corner::kLeftTop)]);
+	mapChipType = mapChipField_->GetMapChipTypeByIndex(lefIndexSet.xIndex, lefIndexSet.yIndex);
+	if (mapChipType == MapChipType::kBlank) {
+		hit = true;
+	}
+	//右上
+	IndexSet RightIndexSet;
+	RightIndexSet = mapChipField_->GetMapchipIndexsetByPosition(positonsNew[int(Corner::kRightTop)]);
+	mapChipType = mapChipField_->GetMapChipTypeByIndex(RightIndexSet.xIndex, RightIndexSet.yIndex);
 	if (mapChipType == MapChipType::kBlank) {
 		hit = true;
 	}
 
-	IndexSet indexSet;
-	indexSet = mapChipField_->GetMapchipIndexsetByPosition(positonsNew[int(Corner::kRightTop)]);
-	mapChipType = mapChipField_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex);
-	if (mapChipType == MapChipType::kBlank) {
-		hit = true;
+	if (hit) {
+	
+		IndexSet = mapChipField_->GetMapchipIndexsetByPosition(top);
+		MapchipField::Rect rect = mapChipField_->GetRectByIndex(indexSet.xindex, IndexSet.yindex);
+		info.move.y = std::max(0.0f, );
+		info.hitwall = true;
+
 	}
 }
-
+//#pragma warning(push)
+//#pragma warning(disable : 4100)
 void Player::CollisionMapBottom(CollisionMapInfo& info) {}
 
 void Player::CollisionMapRight(CollisionMapInfo& info) {}
 
 void Player::CollisionMapLeft(CollisionMapInfo& info) {}
-
+//#pragma warning(pop)
 
