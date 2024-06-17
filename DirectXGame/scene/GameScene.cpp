@@ -53,7 +53,7 @@ void GameScene::Initialize() {
 	player_->Initialize(model_,textureHandle_, &viewProjection_, playerPosition);
 
 	//カメラコントロール
-	movebleArea_ = {9.5f, 186.5f, 5.0f, 50.0f};
+	movebleArea_ = {17.0f, 179.0f, 9.0f, 50.0f};
 	cameraController_ = new CameraController;
 	cameraController_->Initialize();
 	cameraController_->SetTarget(player_);

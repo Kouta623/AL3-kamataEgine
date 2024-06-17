@@ -106,8 +106,8 @@ void Player::Update() {
 	CollisionMapInfo info;
 	info.move = velocity_;
 	CollisionMap(info);
-	velocity_=info.move;
-	worldTransform_.translation_ += velocity_;
+	// velocity_=info.move;
+	//worldTransform_.translation_ += velocity_;
 
 	// 7 旋回制御
 	if (trunTime_ > 0.0f) {
@@ -149,6 +149,8 @@ void Player::CollisionMap(CollisionMapInfo& info) {
 	CollisionMapBottom(info);
 	CollisionMapRight(info);
 	CollisionMapLeft(info);
+
+	CeilingContact(info);
 }
 
 void Player::CollisionMapTop(CollisionMapInfo& info) {
@@ -171,14 +173,14 @@ void Player::CollisionMapTop(CollisionMapInfo& info) {
 	IndexSet lefIndexSet;
 	lefIndexSet = mapChipField_->GetMapchipIndexsetByPosition(positonsNew[kLeftTop]);
 	mapChipType = mapChipField_->GetMapChipTypeByIndex(lefIndexSet.xIndex, lefIndexSet.yIndex);
-	if (mapChipType == MapChipType::kBlank) {
+	if (mapChipType == MapChipType::kBlock) {
 		hit = true;
 	}
 	// 右上
 	IndexSet RightIndexSet;
 	RightIndexSet = mapChipField_->GetMapchipIndexsetByPosition(positonsNew[kRightTop]);
 	mapChipType = mapChipField_->GetMapChipTypeByIndex(RightIndexSet.xIndex, RightIndexSet.yIndex);
-	if (mapChipType == MapChipType::kBlank) {
+	if (mapChipType == MapChipType::kBlock) {
 		hit = true;
 	}
 

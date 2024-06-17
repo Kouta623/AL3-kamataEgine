@@ -31,7 +31,7 @@ public:
 private:
 	ViewProjection viewProjection_;
 	Player* target_ = nullptr;
-	Vector3 targetoffset_ = {0, 0, -15.0f};
+	Vector3 targetoffset_ = {0, 0, -25.0f};
 	Vector3 goalPos_={};
 	static inline const float kInterpolationRate = 0.5f;
 	static inline const float kVelocityBias = 5;
