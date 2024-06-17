@@ -1,6 +1,8 @@
 #pragma once
 #include<math.h>
 #include<assert.h>
+#include<Vector3.h> 
+#include<Matrix4x4.h>
 //#include <Novice.h>
 
 //
@@ -187,10 +189,11 @@ inline Matrix4x4 MakeAffineMatrix(const Vector3& scale, const Vector3& rotate, c
 	return Multiply(Multiply(matScale, makeRotate), matTranslate);
 }
 
-Vector3 operator+(Vector3 num1, Vector3 num2) { 
-	num1.x += num2.x; 
-	num1.y += num2.y; 
-	num1.z += num2.z; 
+
+inline Vector3 operator+(Vector3 num1, Vector3 num2) {
+	num1.x += num2.x;
+	num1.y += num2.y;
+	num1.z += num2.z;
 
 	return num1;
 }

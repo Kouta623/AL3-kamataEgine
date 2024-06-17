@@ -1,13 +1,13 @@
 #pragma once
 #define NOMINMAX
 #include "Input.h"
+#include "MapchipField.h"
 #include "Model.h"
 #include "WorldTransform.h"
 #include <ViewProjection.h>
 #include <algorithm>
 #include <cassert>
 #include <numbers>
-#include"MapchipField.h"
 class MapchipField;
 
 enum class LRDirection {
@@ -23,7 +23,7 @@ struct CollisionMapInfo {
 	Vector3 move;
 };
 
- enum Corner {
+enum Corner {
 
 	kRifhtBottom, // 右上
 	kLeftBottom,  // 左下
@@ -61,18 +61,16 @@ public:
 	const Vector3& GetVelocity() const { return velocity_; }
 
 	void SetMapchipField(MapchipField* mapChipField) { mapChipField_ = mapChipField; }
-	
 
-		// キャラクター当たり判定
+	// キャラクター当たり判定
 
-	static inline const float kWidth = 0.8f;
-	static inline const float kHeight = 0.8f;
+	static inline const float kWidth = 1.8f;
+	static inline const float kHeight = 1.8f;
 
 	static inline const float kBlank = 0.1f;
-
 	// 判定結果を判定して移動させる
 	void JudgmenResultMove(const CollisionMapInfo& info);
-	//天井接触
+	// 天井接触
 	void CeilingContact(const CollisionMapInfo& info);
 
 private:
@@ -81,7 +79,6 @@ private:
 	void CollisionMapBottom(CollisionMapInfo& info);
 	void CollisionMapRight(CollisionMapInfo& info);
 	void CollisionMapLeft(CollisionMapInfo& info);
-
 
 	WorldTransform worldTransform_;
 	Model* model_ = nullptr;

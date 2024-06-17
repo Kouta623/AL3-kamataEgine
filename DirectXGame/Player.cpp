@@ -106,6 +106,7 @@ void Player::Update() {
 	CollisionMapInfo info;
 	info.move = velocity_;
 	CollisionMap(info);
+	velocity_=info.move;
 	worldTransform_.translation_ += velocity_;
 
 	// 7 旋回制御
@@ -129,8 +130,7 @@ void Player::Update() {
 
 void Player::Draw() { model_->Draw(worldTransform_, *viewProjection_, textureHandle_); }
 
-
-//Vector3 CollisionPosition(const Vector3& center, Corner corner);
+// Vector3 CollisionPosition(const Vector3& center, Corner corner);
 
 Vector3 CollisionPosition(const Vector3& center, Corner corner) {
 	Vector3 offsetTable[kNumCorner] = {
@@ -156,25 +156,25 @@ void Player::CollisionMapTop(CollisionMapInfo& info) {
 	if (info.move.y <= 0) {
 		return;
 	}
-	std::array<Vector3, static_cast<uint32_t>(Corner :: kNumCorner)> positonsNew;
+	std::array<Vector3, static_cast<uint32_t>(Corner ::kNumCorner)> positonsNew;
 	for (uint32_t i = 0; i < positonsNew.size(); i++) {
 		Vector3 result;
 		result.x = worldTransform_.translation_.x + info.move.x;
-		result. y = worldTransform_.translation_.y+ info.move.y;
+		result.y = worldTransform_.translation_.y + info.move.y;
 		result.z = worldTransform_.translation_.z + info.move.z;
 		positonsNew[i] = CollisionPosition(result, static_cast<Corner>(i));
 	}
 
 	MapChipType mapChipType;
 	bool hit = false;
-	//左上
+	// 左上
 	IndexSet lefIndexSet;
 	lefIndexSet = mapChipField_->GetMapchipIndexsetByPosition(positonsNew[kLeftTop]);
 	mapChipType = mapChipField_->GetMapChipTypeByIndex(lefIndexSet.xIndex, lefIndexSet.yIndex);
 	if (mapChipType == MapChipType::kBlank) {
 		hit = true;
 	}
-	//右上
+	// 右上
 	IndexSet RightIndexSet;
 	RightIndexSet = mapChipField_->GetMapchipIndexsetByPosition(positonsNew[kRightTop]);
 	mapChipType = mapChipField_->GetMapChipTypeByIndex(RightIndexSet.xIndex, RightIndexSet.yIndex);
@@ -183,12 +183,11 @@ void Player::CollisionMapTop(CollisionMapInfo& info) {
 	}
 
 	if (hit) {
-	
+
 		IndexSet indexSet = mapChipField_->GetMapchipIndexsetByPosition(positonsNew[kRightTop]);
 		Rect rect = mapChipField_->GetRectByIndex(indexSet.xIndex, indexSet.yIndex);
-		info.move.y = std::max(0.0f,rect.bottom -worldTransform_.translation_.y,indexSet.yIndex);
-		info.hitwall = true;
-
+		info.move.y = std::max(0.0f, rect.bottom - worldTransform_.translation_.y - kHeight / 2 - kBlank);
+		info.ceiling = true;
 	}
 }
 #pragma warning(push)
@@ -200,15 +199,16 @@ void Player::CollisionMapRight(CollisionMapInfo& info) {}
 void Player::CollisionMapLeft(CollisionMapInfo& info) {}
 #pragma warning(pop)
 
-
 void Player::JudgmenResultMove(const CollisionMapInfo& info) {
 
 	// 移動
-	worldTransform_.translation_ += velocity_;
+	worldTransform_.translation_ += info.move;
 }
 
 void Player::CeilingContact(const CollisionMapInfo& info) {
 
-	velocity_.y = 0;
+	if (info.ceiling) {
 
+		velocity_.y = 0;
+	}
 }
