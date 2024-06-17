@@ -106,7 +106,7 @@ void Player::Update() {
 	CollisionMapInfo info;
 	info.move = velocity_;
 	CollisionMap(info);
-	// velocity_=info.move;
+	velocity_=info.move;
 	//worldTransform_.translation_ += velocity_;
 
 	// 7 旋回制御
@@ -152,7 +152,7 @@ void Player::CollisionMap(CollisionMapInfo& info) {
 
 	CeilingContact(info);
 }
-
+//上
 void Player::CollisionMapTop(CollisionMapInfo& info) {
 
 	if (info.move.y <= 0) {
@@ -188,13 +188,56 @@ void Player::CollisionMapTop(CollisionMapInfo& info) {
 
 		IndexSet indexSet = mapChipField_->GetMapchipIndexsetByPosition(positonsNew[kRightTop]);
 		Rect rect = mapChipField_->GetRectByIndex(indexSet.xIndex, indexSet.yIndex);
-		info.move.y = std::max(0.0f, rect.bottom - worldTransform_.translation_.y - kHeight / 2 - kBlank);
+		info.move.y = std::max(0.0f, (rect.bottom - worldTransform_.translation_.y) - kHeight / 2 - kBlank);
 		info.ceiling = true;
 	}
 }
+//下
+void Player::CollisionMapBottom(CollisionMapInfo& info) {
+
+	//下降
+	if (info.move.y >= 0) {
+		return;
+	}
+	std::array<Vector3, static_cast<uint32_t>(Corner ::kNumCorner)> positonsNew;
+	for (uint32_t i = 0; i < positonsNew.size(); i++) {
+		Vector3 result;
+		result.x = worldTransform_.translation_.x + info.move.x;
+		result.y = worldTransform_.translation_.y + info.move.y;
+		result.z = worldTransform_.translation_.z + info.move.z;
+		positonsNew[i] = CollisionPosition(result, static_cast<Corner>(i));
+	}
+
+	MapChipType mapChipType;
+	bool hit = false;
+	// 左下
+	IndexSet lefIndexSet;
+	lefIndexSet = mapChipField_->GetMapchipIndexsetByPosition(positonsNew[kLeftBottom]);
+	mapChipType = mapChipField_->GetMapChipTypeByIndex(lefIndexSet.xIndex, lefIndexSet.yIndex);
+	if (mapChipType == MapChipType::kBlock) {
+		hit = true;
+	}
+	// 右下
+	IndexSet RightIndexSet;
+	RightIndexSet = mapChipField_->GetMapchipIndexsetByPosition(positonsNew[kRightBottom]);
+	mapChipType = mapChipField_->GetMapChipTypeByIndex(RightIndexSet.xIndex, RightIndexSet.yIndex);
+	if (mapChipType == MapChipType::kBlock) {
+		hit = true;
+	}
+
+	if (hit) {
+
+		IndexSet indexSet = mapChipField_->GetMapchipIndexsetByPosition(positonsNew[kRightBottom]);
+		Rect rect = mapChipField_->GetRectByIndex(indexSet.xIndex, indexSet.yIndex);
+		info.move.y = std::min(0.0f, (rect.top - worldTransform_.translation_.y) + kHeight / 2 + kBlank);
+		info.onGuround = true;
+	}
+
+}
+
+
 #pragma warning(push)
 #pragma warning(disable : 4100)
-void Player::CollisionMapBottom(CollisionMapInfo& info) {}
 
 void Player::CollisionMapRight(CollisionMapInfo& info) {}
 

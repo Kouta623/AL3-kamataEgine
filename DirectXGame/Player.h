@@ -25,7 +25,7 @@ struct CollisionMapInfo {
 
 enum Corner {
 
-	kRifhtBottom, // 右上
+	kRightBottom, // 右上
 	kLeftBottom,  // 左下
 	kRightTop,    // 右上
 	kLeftTop,     // 左上
@@ -64,8 +64,8 @@ public:
 
 	// キャラクター当たり判定
 
-	static inline const float kWidth = 1.8f;
-	static inline const float kHeight = 1.8f;
+	static inline const float kWidth = 1.9f;
+	static inline const float kHeight = 1.9f;
 
 	static inline const float kBlank = 0.1f;
 	// 判定結果を判定して移動させる
