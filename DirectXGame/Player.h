@@ -8,6 +8,7 @@
 #include <algorithm>
 #include <cassert>
 #include <numbers>
+#include <imgui.h>
 class MapchipField;
 
 enum class LRDirection {
@@ -114,5 +115,5 @@ private:
 	//着地速度減衰
 	static inline const float kAttenuationLanding = 0.1f;
 	//微小な値
-	static inline const float kMinuteValue = -0.1f;
+	static inline const float kMinuteValue = 0.2f;
 };
