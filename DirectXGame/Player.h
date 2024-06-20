@@ -18,7 +18,7 @@ enum class LRDirection {
 struct CollisionMapInfo {
 
 	bool ceiling = false;
-	bool onGuround = false;
+	bool landing = false;
 	bool hitwall = false;
 	Vector3 move;
 };
@@ -72,6 +72,8 @@ public:
 	void JudgmenResultMove(const CollisionMapInfo& info);
 	// 天井接触
 	void CeilingContact(const CollisionMapInfo& info);
+	//接着状態切り替え
+	void AdhesionStateSwitching(const CollisionMapInfo& info);
 
 private:
 	void CollisionMap(CollisionMapInfo& info);
@@ -109,4 +111,8 @@ private:
 	static inline const float kJumpAcceleration = 1.5f;
 	// マップチップによるフィールド
 	MapchipField* mapChipField_ = nullptr;
+	//着地速度減衰
+	static inline const float kAttenuationLanding = 0.1f;
+	//微小な値
+	static inline const float kMinuteValue = -0.1f;
 };

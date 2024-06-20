@@ -106,8 +106,9 @@ void Player::Update() {
 	CollisionMapInfo info;
 	info.move = velocity_;
 	CollisionMap(info);
+	//AdhesionStateSwitching(info);
 	velocity_=info.move;
-	//worldTransform_.translation_ += velocity_;
+
 
 	// 7 旋回制御
 	if (trunTime_ > 0.0f) {
@@ -230,7 +231,7 @@ void Player::CollisionMapBottom(CollisionMapInfo& info) {
 		IndexSet indexSet = mapChipField_->GetMapchipIndexsetByPosition(positonsNew[kRightBottom]);
 		Rect rect = mapChipField_->GetRectByIndex(indexSet.xIndex, indexSet.yIndex);
 		info.move.y = std::min(0.0f, (rect.top - worldTransform_.translation_.y) + kHeight / 2 + kBlank);
-		info.onGuround = true;
+		info.landing = true;
 	}
 
 }
@@ -256,4 +257,60 @@ void Player::CeilingContact(const CollisionMapInfo& info) {
 
 		velocity_.y = 0;
 	}
+}
+
+void Player::AdhesionStateSwitching(const CollisionMapInfo& info) {
+
+	
+	if (onGround_) {
+	
+		if (velocity_.y > 0.0f) {
+		
+			onGround_ = false;
+
+		} else {
+			std::array<Vector3, static_cast<uint32_t>(Corner ::kNumCorner)> positonsNew;
+			MapChipType mapChipType;
+			//真下の当たり判定
+			bool hit = false;
+			// 左下
+			IndexSet lefIndexSet;
+			lefIndexSet = mapChipField_->GetMapchipIndexsetByPosition(positonsNew[kLeftBottom]);
+			mapChipType = mapChipField_->GetMapChipTypeByIndex(lefIndexSet.xIndex, lefIndexSet.yIndex);
+			if (mapChipType == MapChipType::kBlock) {
+				hit = true;
+			}
+			positonsNew[kLeftBottom] + Vector3(0, kMinuteValue, 0);
+			// 右下
+			IndexSet RightIndexSet;
+			RightIndexSet = mapChipField_->GetMapchipIndexsetByPosition(positonsNew[kRightBottom]);
+			mapChipType = mapChipField_->GetMapChipTypeByIndex(RightIndexSet.xIndex, RightIndexSet.yIndex);
+			if (mapChipType == MapChipType::kBlock) {
+				hit = true;
+			}
+			positonsNew[kRightBottom] + Vector3(0, kMinuteValue, 0);
+			if (!hit) {
+			
+				onGround_ = false;
+
+			}
+
+		}
+	
+	} else {
+	
+		//着地フラグ
+		if (info.landing) {
+
+			//着地切り替え
+			onGround_ = true;
+			//x速度減衰
+			velocity_.x *= (1.0f - kAttenuationLanding);
+			//y速度０に
+			velocity_.y = 0.0f;
+		
+		}
+	
+	}
+
 }
