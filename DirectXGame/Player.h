@@ -65,8 +65,8 @@ public:
 
 	// キャラクター当たり判定
 
-	static inline const float kWidth = 1.9f;
-	static inline const float kHeight = 1.9f;
+	static inline const float kWidth = 2.0f;
+	static inline const float kHeight = 2.0f;
 
 	static inline const float kBlank = 0.1f;
 	// 判定結果を判定して移動させる
