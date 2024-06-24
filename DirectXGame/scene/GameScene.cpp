@@ -5,6 +5,7 @@ GameScene::GameScene() {}
 GameScene::~GameScene() {
 	delete model_;
 	delete player_;
+	delete enemy_;
 	delete skydome_;
 	delete modelBlock_;
 	delete debugCamera_;
@@ -31,6 +32,7 @@ void GameScene::Initialize() {
 	viewProjection_.Initialize();
 
 	player_ = new Player();
+	enemy_ = new Enemy();
 
 	modelBlock_ = Model::Create();
 	blockTextureHandle_ = TextureManager::Load("cube/cube.jpg");
@@ -52,6 +54,13 @@ void GameScene::Initialize() {
 	Vector3 playerPosition = mapChipField_->GetMapChipPositionByIndex(2, 18);
 	player_->Initialize(model_,textureHandle_, &viewProjection_, playerPosition);
 
+
+	enemy_->SetMapchipField(mapChipField_);
+	// 敵配置
+	Vector3 enemyPosition = mapChipField_->GetMapChipPositionByIndex(12, 18);
+	enemy_->Initialize(model_, textureHandle_, &viewProjection_, enemyPosition);
+
+
 	//カメラコントロール
 	movebleArea_ = {17.0f, 179.0f, 9.0f, 50.0f};
 	cameraController_ = new CameraController;
@@ -66,6 +75,7 @@ void GameScene::Update() {
 
 	skydome_->Update();
 	player_->Update();
+	enemy_->Update();
 
 	for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_) {
 		for (WorldTransform* worldTransformBlocks : worldTransformBlockLine) {
@@ -120,7 +130,8 @@ void GameScene::Draw() {
 	// 3Dオブジェクト描画前処理
 	Model::PreDraw(commandList);
 	player_->Draw();
-//	model_->Draw(worldTransform_, viewProjection_, textureHandle_);
+	enemy_->Draw();
+	    //	model_->Draw(worldTransform_, viewProjection_, textureHandle_);
 	skydome_->Draw();
 
 	for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_) {
