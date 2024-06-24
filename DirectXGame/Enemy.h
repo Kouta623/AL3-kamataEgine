@@ -24,7 +24,9 @@ public:
 	void Draw();
 
 	void SetMapchipField(MapchipField* mapChipField) { mapChipField_ = mapChipField; }
-	private:
+	
+
+private:
 	WorldTransform worldTransform_;
 	Model* model_ = nullptr;
 	uint32_t textureHandle_ = 0u;
@@ -32,4 +34,11 @@ public:
 	Vector3 velocity_ = {};
 	// マップチップによるフィールド
 	MapchipField* mapChipField_ = nullptr;
+
+	//スピード
+	static inline const float kWalkSpeed = 0.1f;
+	//アニメーション
+	static inline const float kWalkMotionAngleStart = 0.1f;
+	static inline const float kWalkMotionAngleend= 0.1f;
+	static inline const float kwalkMotionTime= 1.0f;
 };
