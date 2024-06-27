@@ -39,9 +39,9 @@ private:
 	static inline const float kWalkSpeed = 0.1f;
 	//アニメーション
 	//最初
-	static inline const float kWalkMotionAngleStart = 0.1f;
+	static inline const float kWalkMotionAngleStart = -30.0f;
 	//最後
-	static inline const float kWalkMotionAngleend= 0.1f;
+	static inline const float kWalkMotionAngleend= 30.0f;
 	//周期
 	static inline const float kwalkMotionTime= 1.0f;
 

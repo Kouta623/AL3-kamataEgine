@@ -20,12 +20,11 @@ void Enemy::Update() {
 
 	// タイマー加算
 	walkTimer_ += 1.0f / 60.0f;
-	//回転アニメーション
-	float param = std::sin(walkTimer_);
+	// 回転アニメーション
+	float param = std::sin((2*3.14f)*walkTimer_/kwalkMotionTime);
 	float radian = kWalkMotionAngleStart + kWalkMotionAngleend * (param + 1.0f) / 2.0f;
-	worldTransform_.rotation_.x= (radian);
+	worldTransform_.rotation_.x = (radian) * 3.14f / 360;
 
-	worldTransform_.TransferMatrix();
 	worldTransform_.translation_ += velocity_;
 	worldTransform_.UpdataMatrix();
 }
