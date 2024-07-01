@@ -9,8 +9,9 @@
 #include <cassert>
 #include <numbers>
 #include <imgui.h>
+#include"AABB.h"
 class MapchipField;
-
+class Enemy;
 enum class LRDirection {
 	kRight,
 	kLeft,
@@ -75,6 +76,13 @@ public:
 	void CeilingContact(const CollisionMapInfo& info);
 	//接着状態切り替え
 	void AdhesionStateSwitching(const CollisionMapInfo& info);
+	// ワールド座標を取得
+	Vector3 GetWorldPosition();
+	// AABB
+	aabb GetAABB();
+
+	void Oncollision(const Enemy* enemy);
+
 
 private:
 	void CollisionMap(CollisionMapInfo& info);
@@ -116,4 +124,5 @@ private:
 	static inline const float kAttenuationLanding = 0.1f;
 	//微小な値
 	static inline const float kMinuteValue = 0.2f;
+
 };

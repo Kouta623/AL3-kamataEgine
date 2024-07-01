@@ -17,6 +17,7 @@
 #include "MapchipField.h"
 #include "CameraController.h"
 #include"Enemy.h"
+#include "AABB.h"
 
 /// <summary>
 /// ゲームシーン
@@ -52,6 +53,9 @@ public: // メンバ関数
 
 	void GenerateBlocks();
 
+	void CheckAllCollision();
+
+	
 private: // メンバ変数
 	Model* model_ = nullptr;
 	WorldTransform worldTransform_;
@@ -80,4 +84,6 @@ private: // メンバ変数
 	CameraController* cameraController_;
 	
 	CameraController::Rect movebleArea_ = {};
+
+	std::list<Enemy*> enemies_;
 };

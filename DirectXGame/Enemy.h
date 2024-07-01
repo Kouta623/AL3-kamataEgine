@@ -9,7 +9,10 @@
 #include <cassert>
 #include <numbers>
 #include <imgui.h>
+#include"AABB.h"
 class MapchipField;
+class Player;
+
 
 class Enemy {
 public:
@@ -24,6 +27,11 @@ public:
 	void Draw();
 
 	void SetMapchipField(MapchipField* mapChipField) { mapChipField_ = mapChipField; }
+	
+	Vector3 GetWorldPosition();
+	aabb GetAABB();
+
+	void OnCollision(const Player* player);
 	
 
 private:
@@ -47,4 +55,7 @@ private:
 
 	//経過時間
 	float walkTimer_ = 0.0f;
+
+	static inline const float kWidth = 2.0f;
+	static inline const float kHeight = 2.0f;
 };

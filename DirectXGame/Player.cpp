@@ -246,6 +246,7 @@ void Player::CollisionMapBottom(CollisionMapInfo& info) {
 void Player::CollisionMapRight(CollisionMapInfo& info) {}
 
 void Player::CollisionMapLeft(CollisionMapInfo& info) {}
+
 #pragma warning(pop)
 
 void Player::JudgmenResultMove(const CollisionMapInfo& info) {
@@ -312,3 +313,30 @@ void Player::AdhesionStateSwitching(const CollisionMapInfo& info) {
 		}
 	}
 }
+
+Vector3 Player::GetWorldPosition() { 
+	Vector3 worldPos;
+	worldPos.x = worldTransform_.matWorld_.m[3][0];
+	worldPos.y = worldTransform_.matWorld_.m[3][1];
+	worldPos.z = worldTransform_.matWorld_.m[3][2];
+	return worldPos;
+}
+
+aabb Player::GetAABB() { 
+
+	Vector3 worldPos = GetWorldPosition();
+	aabb AABB;
+	
+	AABB.min = {worldPos.x - kWidth / 2.0f, worldPos.y - kWidth / 2.0f, worldPos.z - kWidth / 2.0f};
+	AABB.max = {worldPos.x + kHeight / 2.0f, worldPos.y + kHeight / 2.0f, worldPos.z + kHeight / 2.0f};
+	return AABB;
+}
+
+void Player::Oncollision(const Enemy* enemy) {
+
+	(void)enemy;
+	velocity_ = Vector3(0,2,0);
+
+}
+
+
