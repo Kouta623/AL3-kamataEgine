@@ -5,10 +5,10 @@ GameScene::GameScene() {}
 GameScene::~GameScene() {
 	delete model_;
 	delete player_;
-	//for (Enemy* enemy : enemies_) {
-	//	delete enemy_;
-	//};
-	delete enemy_;
+	for (Enemy* enemy : enemies_) {
+		delete enemy;
+	};
+	//delete enemy_;
 	delete skydome_;
 	delete modelBlock_;
 	delete debugCamera_;
@@ -35,7 +35,6 @@ void GameScene::Initialize() {
 	viewProjection_.Initialize();
 
 	player_ = new Player();
-	enemy_ = new Enemy();
 
 	modelBlock_ = Model::Create();
 	blockTextureHandle_ = TextureManager::Load("cube/cube.jpg");
@@ -58,19 +57,17 @@ void GameScene::Initialize() {
 	player_->Initialize(model_,textureHandle_, &viewProjection_, playerPosition);
 
 
-	enemy_->SetMapchipField(mapChipField_);
-
-	//for (int32_t i = 0; i < 1; ++i) {
-	//
-	//	Enemy* newEnemy = new Enemy();
-	//	// 敵配置
-	//	Vector3 enemyPosition = mapChipField_->GetMapChipPositionByIndex(12, 18);
-	//	newEnemy->Initialize(model_, textureHandle_, &viewProjection_, enemyPosition);
-	//	enemies_.push_back(newEnemy);
-	//}
+	for (int32_t i = 0; i < 3; ++i) {
 	
-	Vector3 enemyPosition = mapChipField_->GetMapChipPositionByIndex(12, 18);
-	enemy_->Initialize(model_, textureHandle_, &viewProjection_, enemyPosition);
+		Enemy* newEnemy = new Enemy();
+		// 敵配置
+		Vector3 enemyPosition = mapChipField_->GetMapChipPositionByIndex(8+i*5, 18);
+		newEnemy->Initialize(model_, textureHandle_, &viewProjection_, enemyPosition);
+		enemies_.push_back(newEnemy);
+	}
+	
+	//Vector3 enemyPosition = mapChipField_->GetMapChipPositionByIndex(12, 18);
+	//enemy_->Initialize(model_, textureHandle_, &viewProjection_, enemyPosition);
 
 	//カメラコントロール
 	movebleArea_ = {17.0f, 179.0f, 9.0f, 50.0f};
@@ -88,11 +85,11 @@ void GameScene::Update() {
 
 	skydome_->Update();
 	player_->Update();
-	//for (Enemy* enemy : enemies_) {
-	//	enemy_->Update();
-	//};
+	for (Enemy* enemy : enemies_) {
+		enemy->Update();
+	};
 
-	enemy_->Update();
+	//enemy_->Update();
 	CheckAllCollision();
 
 	for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_) {
@@ -148,10 +145,10 @@ void GameScene::Draw() {
 	// 3Dオブジェクト描画前処理
 	Model::PreDraw(commandList);
 	player_->Draw();
-	//for (Enemy* enemy : enemies_) {
-	//	enemy_->Draw();
-	//};
-	enemy_->Draw();
+	for (Enemy* enemy : enemies_) {
+		enemy->Draw();
+	};
+	//enemy_->Draw();
 	    //	model_->Draw(worldTransform_, viewProjection_, textureHandle_);
 	skydome_->Draw();
 
@@ -217,22 +214,22 @@ void GameScene::CheckAllCollision() {
 	//自キャラ座標
 	aabb1 = player_->GetAABB();
 	//自キャラとEnemyの判定
-	//for (Enemy* enemy : enemies_) {
-	//	aabb2 = enemy->GetAABB();
-	//	if (IsCollision(aabb1, aabb2)) {
-	//	
-	//		player_->Oncollision(enemy);
-	//		enemy->OnCollision(player_);
+	for (Enemy* enemy : enemies_) {
+		aabb2 = enemy->GetAABB();
+		if (IsCollision(aabb1, aabb2)) {
+		
+			player_->Oncollision(enemy);
+			enemy->OnCollision(player_);
 
-	//	}
-	//}
-	aabb2 = enemy_->GetAABB();
+		}
+	}
+	/*aabb2 = enemy_->GetAABB();
 		if (IsCollision(aabb1, aabb2)) {
 	
 			player_->Oncollision(enemy_);
 			enemy_->OnCollision(player_);
 
-		}
+		}*/
 
 	
 }
