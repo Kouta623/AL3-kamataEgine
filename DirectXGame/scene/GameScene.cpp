@@ -19,7 +19,7 @@ GameScene::~GameScene() {
 			delete worldTransformBlocks;
 		}
 	}
-
+	delete deathParticles_;
 	worldTransformBlocks_.clear();
 }
 
@@ -61,7 +61,7 @@ void GameScene::Initialize() {
 	
 		Enemy* newEnemy = new Enemy();
 		// 敵配置
-		Vector3 enemyPosition = mapChipField_->GetMapChipPositionByIndex(8+i*5, 18);
+		Vector3 enemyPosition = mapChipField_->GetMapChipPositionByIndex(20+i*5, 18);
 		newEnemy->Initialize(model_, textureHandle_, &viewProjection_, enemyPosition);
 		enemies_.push_back(newEnemy);
 	}
@@ -77,8 +77,10 @@ void GameScene::Initialize() {
 	cameraController_->Reset();
 	cameraController_->SetMoveableArea(movebleArea_);
 
-
-	
+	// パーティクル
+	deathParticles_ = new DeathParticles;
+	modelParticls_ = Model::CreateFromOBJ("perticle", true);
+	deathParticles_->Initialize(modelParticls_, &viewProjection_, playerPosition);
 }
 
 void GameScene::Update() {
@@ -88,7 +90,9 @@ void GameScene::Update() {
 	for (Enemy* enemy : enemies_) {
 		enemy->Update();
 	};
-
+	if (deathParticles_) {
+		deathParticles_->Update();
+	}
 	//enemy_->Update();
 	CheckAllCollision();
 
@@ -120,6 +124,8 @@ void GameScene::Update() {
 	viewProjection_.matView = cameraController_->GetViewProjection().matView;
 	viewProjection_.matProjection = cameraController_->GetViewProjection().matProjection;
 	viewProjection_.TransferMatrix();
+
+	
 }
 
 void GameScene::Draw() {
@@ -151,6 +157,10 @@ void GameScene::Draw() {
 	//enemy_->Draw();
 	    //	model_->Draw(worldTransform_, viewProjection_, textureHandle_);
 	skydome_->Draw();
+	//パーティクル
+	if (deathParticles_) {
+		deathParticles_->Draw();
+	}
 
 	for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_) {
 		for (WorldTransform* worldTransformBlocks : worldTransformBlockLine) {

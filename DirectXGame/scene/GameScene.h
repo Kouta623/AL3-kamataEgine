@@ -18,6 +18,7 @@
 #include "CameraController.h"
 #include"Enemy.h"
 #include "AABB.h"
+#include "DeathParticles.h"
 
 /// <summary>
 /// ゲームシーン
@@ -85,4 +86,8 @@ private: // メンバ変数
 	CameraController::Rect movebleArea_ = {};
 
 	std::list<Enemy*> enemies_;
+	//パーティクル
+	Model* modelParticls_ = nullptr;
+	DeathParticles* deathParticles_ = nullptr;
+	
 };

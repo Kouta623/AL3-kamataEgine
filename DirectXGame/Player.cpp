@@ -130,11 +130,18 @@ void Player::Update() {
 
 	worldTransform_.UpdataMatrix();
 
+	
+
+
+
+
 	ImGui::Begin("window");
 	ImGui::InputFloat3("Velocity", &velocity_.x, "%.3f", ImGuiInputTextFlags_ReadOnly);
 	ImGui::InputFloat3("Translation", &worldTransform_.translation_.x, "%.3f", ImGuiInputTextFlags_ReadOnly);
 	ImGui::InputFloat3("info.velocity", &info.move.x, "%.3f", ImGuiInputTextFlags_ReadOnly);
 	ImGui::End();
+
+
 }
 
 void Player::Draw() { model_->Draw(worldTransform_, *viewProjection_, textureHandle_); }
