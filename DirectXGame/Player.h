@@ -10,6 +10,7 @@
 #include <numbers>
 #include <imgui.h>
 #include"AABB.h"
+
 class MapchipField;
 class Enemy;
 enum class LRDirection {
@@ -83,6 +84,8 @@ public:
 
 	void Oncollision(const Enemy* enemy);
 
+	// デスフラグgetter
+	bool isDead_() const { return isDead_; }
 
 private:
 	void CollisionMap(CollisionMapInfo& info);
@@ -125,4 +128,6 @@ private:
 	//微小な値
 	static inline const float kMinuteValue = 0.2f;
 
+    // デスフラグ
+	bool isDead_ = false;
 };

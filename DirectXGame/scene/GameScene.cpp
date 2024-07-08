@@ -8,7 +8,7 @@ GameScene::~GameScene() {
 	for (Enemy* enemy : enemies_) {
 		delete enemy;
 	};
-	//delete enemy_;
+	// delete enemy_;
 	delete skydome_;
 	delete modelBlock_;
 	delete debugCamera_;
@@ -24,6 +24,8 @@ GameScene::~GameScene() {
 }
 
 void GameScene::Initialize() {
+	// フェーズ
+	phase_ = Phase::kPlay;
 
 	dxCommon_ = DirectXCommon::GetInstance();
 	input_ = Input::GetInstance();
@@ -52,24 +54,23 @@ void GameScene::Initialize() {
 	GenerateBlocks();
 
 	player_->SetMapchipField(mapChipField_);
-	//プレイヤ配置
+	// プレイヤ配置
 	Vector3 playerPosition = mapChipField_->GetMapChipPositionByIndex(2, 18);
-	player_->Initialize(model_,textureHandle_, &viewProjection_, playerPosition);
-
+	player_->Initialize(model_, textureHandle_, &viewProjection_, playerPosition);
 
 	for (int32_t i = 0; i < 3; ++i) {
-	
+
 		Enemy* newEnemy = new Enemy();
 		// 敵配置
-		Vector3 enemyPosition = mapChipField_->GetMapChipPositionByIndex(20+i*5, 18);
+		Vector3 enemyPosition = mapChipField_->GetMapChipPositionByIndex(20 + i * 5, 18);
 		newEnemy->Initialize(model_, textureHandle_, &viewProjection_, enemyPosition);
 		enemies_.push_back(newEnemy);
 	}
-	
-	//Vector3 enemyPosition = mapChipField_->GetMapChipPositionByIndex(12, 18);
-	//enemy_->Initialize(model_, textureHandle_, &viewProjection_, enemyPosition);
 
-	//カメラコントロール
+	// Vector3 enemyPosition = mapChipField_->GetMapChipPositionByIndex(12, 18);
+	// enemy_->Initialize(model_, textureHandle_, &viewProjection_, enemyPosition);
+
+	// カメラコントロール
 	movebleArea_ = {17.0f, 179.0f, 9.0f, 50.0f};
 	cameraController_ = new CameraController;
 	cameraController_->Initialize();
@@ -84,26 +85,50 @@ void GameScene::Initialize() {
 }
 
 void GameScene::Update() {
+	// フェーズ
+	switch (phase_) {
+	case Phase::kPlay:
+		skydome_->Update();
 
-	skydome_->Update();
-	player_->Update();
-	for (Enemy* enemy : enemies_) {
-		enemy->Update();
-	};
-	if (deathParticles_) {
-		deathParticles_->Update();
-	}
-	//enemy_->Update();
-	CheckAllCollision();
+		player_->Update();
 
-	for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_) {
-		for (WorldTransform* worldTransformBlocks : worldTransformBlockLine) {
-			if (!worldTransformBlocks)
-				continue;
-			worldTransformBlocks->matWorld_ = MakeAffineMatrix(worldTransformBlocks->scale_, worldTransformBlocks->rotation_, worldTransformBlocks->translation_);
-			worldTransformBlocks->TransferMatrix();
+		for (Enemy* enemy : enemies_) {
+			enemy->Update();
+		};
+
+		cameraController_->Update();
+
+		viewProjection_.matView = cameraController_->GetViewProjection().matView;
+		viewProjection_.matProjection = cameraController_->GetViewProjection().matProjection;
+		viewProjection_.TransferMatrix();
+
+		for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_) {
+			for (WorldTransform* worldTransformBlocks : worldTransformBlockLine) {
+				if (!worldTransformBlocks)
+					continue;
+				worldTransformBlocks->matWorld_ = MakeAffineMatrix(worldTransformBlocks->scale_, worldTransformBlocks->rotation_, worldTransformBlocks->translation_);
+				worldTransformBlocks->TransferMatrix();
+			}
 		}
+		CheckAllCollision();
+
+		break;
+	case Phase::kDeth:
+		skydome_->Update();
+
+		for (Enemy* enemy : enemies_) {
+			enemy->Update();
+		};
+		if (deathParticles_) {
+			deathParticles_->Update();
+		}
+		cameraController_->Update();
+		break;
+	default:
+		break;
 	}
+
+	
 
 #ifdef _DEBUG
 	if (input_->TriggerKey(DIK_SPACE)) {
@@ -119,13 +144,7 @@ void GameScene::Update() {
 	} else {
 		viewProjection_.UpdateMatrix();
 	}
-	cameraController_->Update();
 
-	viewProjection_.matView = cameraController_->GetViewProjection().matView;
-	viewProjection_.matProjection = cameraController_->GetViewProjection().matProjection;
-	viewProjection_.TransferMatrix();
-
-	
 }
 
 void GameScene::Draw() {
@@ -154,10 +173,10 @@ void GameScene::Draw() {
 	for (Enemy* enemy : enemies_) {
 		enemy->Draw();
 	};
-	//enemy_->Draw();
-	    //	model_->Draw(worldTransform_, viewProjection_, textureHandle_);
+	// enemy_->Draw();
+	//	model_->Draw(worldTransform_, viewProjection_, textureHandle_);
 	skydome_->Draw();
-	//パーティクル
+	// パーティクル
 	if (deathParticles_) {
 		deathParticles_->Draw();
 	}
@@ -218,28 +237,50 @@ void GameScene::GenerateBlocks() {
 }
 
 void GameScene::CheckAllCollision() {
-	
-	//判定対象1,2
+
+	// 判定対象1,2
 	aabb aabb1, aabb2;
-	//自キャラ座標
+	// 自キャラ座標
 	aabb1 = player_->GetAABB();
-	//自キャラとEnemyの判定
+	// 自キャラとEnemyの判定
 	for (Enemy* enemy : enemies_) {
 		aabb2 = enemy->GetAABB();
 		if (IsCollision(aabb1, aabb2)) {
-		
+
 			player_->Oncollision(enemy);
 			enemy->OnCollision(player_);
-
 		}
 	}
 	/*aabb2 = enemy_->GetAABB();
-		if (IsCollision(aabb1, aabb2)) {
-	
-			player_->Oncollision(enemy_);
-			enemy_->OnCollision(player_);
+	    if (IsCollision(aabb1, aabb2)) {
 
-		}*/
+	        player_->Oncollision(enemy_);
+	        enemy_->OnCollision(player_);
 
-	
+	    }*/
+}
+
+void GameScene::ChangePhase() {
+
+	switch (phase_) {
+	case Phase::kPlay:
+		if (player_->isDead_()) {
+			//死亡演出フェーズ切り替え
+			phase_ = Phase::kDeth;
+			//自キャラの座標を獲得
+			const Vector3& dethParticlesPosition = player_->GetWorldPosition();
+
+		}
+		//自キャラの座標にデスパーティクル
+		deathParticles_ = new DeathParticles;
+		deathParticles_->Initialize(model_, &viewProjection_, dethParticlesPosition);
+		//初期化
+
+
+		break;
+	case Phase::kDeth:
+		break;
+	default:
+		break;
+	}
 }
