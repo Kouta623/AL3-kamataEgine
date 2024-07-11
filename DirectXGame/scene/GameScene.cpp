@@ -55,7 +55,7 @@ void GameScene::Initialize() {
 
 	player_->SetMapchipField(mapChipField_);
 	// プレイヤ配置
-	Vector3 playerPosition = mapChipField_->GetMapChipPositionByIndex(2, 18);
+	Vector3 playerPosition = mapChipField_->GetMapChipPositionByIndex(2, 17);
 	player_->Initialize(model_, textureHandle_, &viewProjection_, playerPosition);
 
 	for (int32_t i = 0; i < 3; ++i) {
@@ -94,9 +94,9 @@ void GameScene::Update() {
 
 		player_->Update();
 
-		for (Enemy* enemy : enemies_) {
-			enemy->Update();
-		};
+		//for (Enemy* enemy : enemies_) {
+		//	enemy->Update();
+		//};
 
 		cameraController_->Update();
 
