@@ -85,9 +85,11 @@ void GameScene::Initialize() {
 }
 
 void GameScene::Update() {
+	ChangePhase();
 	// フェーズ
 	switch (phase_) {
 	case Phase::kPlay:
+		
 		skydome_->Update();
 
 		player_->Update();
@@ -123,6 +125,7 @@ void GameScene::Update() {
 			deathParticles_->Update();
 		}
 		cameraController_->Update();
+	
 		break;
 	default:
 		break;
@@ -142,7 +145,7 @@ void GameScene::Update() {
 		viewProjection_.matProjection = debugCamera_->GetViewProjection().matProjection;
 		viewProjection_.TransferMatrix();
 	} else {
-		viewProjection_.UpdateMatrix();
+		//viewProjection_.UpdateMatrix();
 	}
 
 }
@@ -264,19 +267,16 @@ void GameScene::ChangePhase() {
 
 	switch (phase_) {
 	case Phase::kPlay:
-		if (player_->isDead_()) {
+		if (player_->isDead()) {
 			//死亡演出フェーズ切り替え
 			phase_ = Phase::kDeth;
 			//自キャラの座標を獲得
 			const Vector3& dethParticlesPosition = player_->GetWorldPosition();
-
+			// 自キャラの座標にデスパーティクル
+			deathParticles_ = new DeathParticles;
+			// 初期化
+			deathParticles_->Initialize(modelParticls_, &viewProjection_, dethParticlesPosition);
 		}
-		//自キャラの座標にデスパーティクル
-		deathParticles_ = new DeathParticles;
-		deathParticles_->Initialize(model_, &viewProjection_, dethParticlesPosition);
-		//初期化
-
-
 		break;
 	case Phase::kDeth:
 		break;

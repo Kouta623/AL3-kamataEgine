@@ -85,7 +85,7 @@ public:
 	void Oncollision(const Enemy* enemy);
 
 	// デスフラグgetter
-	bool isDead_() const { return isDead_; }
+	bool isDead() const { return isDead_; }
 
 private:
 	void CollisionMap(CollisionMapInfo& info);

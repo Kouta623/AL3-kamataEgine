@@ -247,14 +247,88 @@ void Player::CollisionMapBottom(CollisionMapInfo& info) {
 	}
 }
 
-#pragma warning(push)
-#pragma warning(disable : 4100)
 
-void Player::CollisionMapRight(CollisionMapInfo& info) {}
+//右
+void Player::CollisionMapRight(CollisionMapInfo& info) {
 
-void Player::CollisionMapLeft(CollisionMapInfo& info) {}
+	if (info.move.y <= 0) {
+		return;
+	}
+	std::array<Vector3, static_cast<uint32_t>(Corner ::kNumCorner)> positonsNew;
+	for (uint32_t i = 0; i < positonsNew.size(); i++) {
+		Vector3 result;
+		result.x = worldTransform_.translation_.x + info.move.x;
+		result.y = worldTransform_.translation_.y + info.move.y;
+		result.z = worldTransform_.translation_.z + info.move.z;
+		positonsNew[i] = CollisionPosition(result, static_cast<Corner>(i));
+	}
 
-#pragma warning(pop)
+	MapChipType mapChipType;
+	bool hit = false;
+	IndexSet indexSet;
+	// 右下
+	indexSet = mapChipField_->GetMapchipIndexsetByPosition(positonsNew[kRightBottom]);
+	mapChipType = mapChipField_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex);
+	if (mapChipType == MapChipType::kBlock) {
+		hit = true;
+	}
+	// 右上
+	indexSet = mapChipField_->GetMapchipIndexsetByPosition(positonsNew[kRightTop]);
+	mapChipType = mapChipField_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex);
+	if (mapChipType == MapChipType::kBlock) {
+		hit = true;
+	}
+
+	if (hit) {
+
+		Rect rect = mapChipField_->GetRectByIndex(indexSet.xIndex, indexSet.yIndex);
+		info.move.y = std::max(0.0f, (rect.bottom - worldTransform_.translation_.y) - kHeight / 2 - kBlank);
+		info.ceiling = true;
+	}
+}
+
+
+void Player::CollisionMapLeft(CollisionMapInfo& info) {
+
+if (info.move.y <= 0) {
+		return;
+	}
+	std::array<Vector3, static_cast<uint32_t>(Corner ::kNumCorner)> positonsNew;
+	for (uint32_t i = 0; i < positonsNew.size(); i++) {
+		Vector3 result;
+		result.x = worldTransform_.translation_.x + info.move.x;
+		result.y = worldTransform_.translation_.y + info.move.y;
+		result.z = worldTransform_.translation_.z + info.move.z;
+		positonsNew[i] = CollisionPosition(result, static_cast<Corner>(i));
+	}
+
+	MapChipType mapChipType;
+	bool hit = false;
+	// 左上
+	IndexSet indexSet;
+	indexSet = mapChipField_->GetMapchipIndexsetByPosition(positonsNew[kLeftTop]);
+	mapChipType = mapChipField_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex);
+	if (mapChipType == MapChipType::kBlock) {
+		hit = true;
+	}
+	// 左下
+
+	indexSet = mapChipField_->GetMapchipIndexsetByPosition(positonsNew[kLeftBottom]);
+	mapChipType = mapChipField_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex);
+	if (mapChipType == MapChipType::kBlock) {
+		hit = true;
+	}
+
+	if (hit) {
+
+		Rect rect = mapChipField_->GetRectByIndex(indexSet.xIndex, indexSet.yIndex);
+		info.move.y = std::max(0.0f, (rect.bottom - worldTransform_.translation_.y) - kHeight / 2 - kBlank);
+		info.ceiling = true;
+	}
+}
+
+
+
 
 void Player::JudgmenResultMove(const CollisionMapInfo& info) {
 

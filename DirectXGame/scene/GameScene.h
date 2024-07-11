@@ -20,11 +20,6 @@
 #include "AABB.h"
 #include "DeathParticles.h"
 
-enum class Phase {
-	kPlay,
-	kDeth,
-};
-Phase phase_;
 /// <summary>
 /// ゲームシーン
 /// </summary>
@@ -65,7 +60,13 @@ public: // メンバ関数
 
 
 private: // メンバ変数
-	Model* model_ = nullptr;
+	enum class Phase {
+		kPlay,
+		kDeth,
+	};
+	Phase phase_;
+
+	Model* model_= nullptr;
 	WorldTransform worldTransform_;
 	ViewProjection viewProjection_;
 
