@@ -94,9 +94,9 @@ void GameScene::Update() {
 
 		player_->Update();
 
-		//for (Enemy* enemy : enemies_) {
-		//	enemy->Update();
-		//};
+		for (Enemy* enemy : enemies_) {
+			enemy->Update();
+		};
 
 		cameraController_->Update();
 
