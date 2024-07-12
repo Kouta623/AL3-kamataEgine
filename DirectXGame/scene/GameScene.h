@@ -57,7 +57,7 @@ public: // メンバ関数
 	void CheckAllCollision();
 
 	void ChangePhase();
-
+	bool IsFinished() const { return finished_; }
 
 private: // メンバ変数
 	enum class Phase {
@@ -98,5 +98,5 @@ private: // メンバ変数
 	Model* modelParticls_ = nullptr;
 	DeathParticles* deathParticles_ = nullptr;
 	
-
+	bool finished_ = false;
 };

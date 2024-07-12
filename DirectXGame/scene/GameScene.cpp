@@ -279,6 +279,10 @@ void GameScene::ChangePhase() {
 		}
 		break;
 	case Phase::kDeth:
+		if (deathParticles_ && deathParticles_->IsFinished()) {
+
+			finished_ = false;
+		}
 		break;
 	default:
 		break;

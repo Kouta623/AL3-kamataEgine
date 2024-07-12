@@ -11,7 +11,7 @@ public:
 	void Initialize(Model* model, ViewProjection* viewProjection, const Vector3& position);
 	void Update();
 	void Draw();
-
+	bool IsFinished() const { return finished_; }
 	private:
 	Model* model_ = nullptr;
 	ViewProjection* viewProjection_ = nullptr;
@@ -33,4 +33,6 @@ public:
 	ObjectColor objectColor_;
 	//色の数値
 	Vector4 color_;
+
+	bool finished_ = false;
 };
