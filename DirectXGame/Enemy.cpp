@@ -4,14 +4,13 @@ Enemy::Enemy() {}
 
 Enemy::~Enemy() {}
 
-void Enemy::Initialize(Model* model, uint32_t textureHandle, ViewProjection* viewProjection, const Vector3& position) {
-	assert(model);
+void Enemy::Initialize(Model* model, ViewProjection* viewProjection, const Vector3& position) {
+
 	model_ = model;
 	worldTransform_.Initialize();
 	viewProjection_ = viewProjection;
 	worldTransform_.translation_ = position;
-	worldTransform_.rotation_.y = std::numbers::pi_v<float> * 3.0f / 2.0f;
-	textureHandle;
+	worldTransform_.rotation_.y = std::numbers::pi_v<float> * 1.0f / 2.0f;
 	velocity_ = {-kWalkSpeed, 0, 0};
 	walkTimer_ = 0.0f;
 }
@@ -29,7 +28,7 @@ void Enemy::Update() {
 	worldTransform_.UpdataMatrix();
 }
 
-void Enemy::Draw() { model_->Draw(worldTransform_, *viewProjection_, textureHandle_); }
+void Enemy::Draw() { model_->Draw(worldTransform_, *viewProjection_); }
 
 Vector3 Enemy::GetWorldPosition() {
 	Vector3 worldPos;

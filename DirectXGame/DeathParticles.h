@@ -11,7 +11,7 @@ public:
 	void Initialize(Model* model, ViewProjection* viewProjection, const Vector3& position);
 	void Update();
 	void Draw();
-	bool IsFinished() const { return finished_; }
+	bool IsFinished() const { return isFinished_; }
 	private:
 	Model* model_ = nullptr;
 	ViewProjection* viewProjection_ = nullptr;
@@ -20,7 +20,7 @@ public:
 	std::array<WorldTransform, kNumParticles> worldTransforms_;
 
 	// 存続時間
-	static inline const float kDuration =5.0f;
+	static inline const float kDuration =2.0f;
 	// 移動の速さ
 	static inline const float kSpeed = 0.1f;
 	// 分割した一個分の角度

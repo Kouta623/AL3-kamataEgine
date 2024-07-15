@@ -47,7 +47,7 @@ public:
 	/// </summary>
 	/// <param name="model">モデル</param>
 	/// <param name="textureHandle">テクスチャーハンドル</param>
-	void Initialize(Model* model, uint32_t textureHandle, ViewProjection* viewProjection, const Vector3& position);
+	void Initialize(Model* model,ViewProjection* viewProjection, const Vector3& position);
 
 	/// <summary>
 	/// アップデート
@@ -96,7 +96,9 @@ private:
 
 	WorldTransform worldTransform_;
 	Model* model_ = nullptr;
-	uint32_t textureHandle_ = 0u;
+
+
+
 	ViewProjection* viewProjection_ = nullptr;
 	Vector3 velocity_ = {};
 
@@ -116,11 +118,11 @@ private:
 	// 着地フラグ
 	bool onGround_ = true;
 	// 重力加速度
-	static inline const float kGravityAcceleration = 0.01f;
+	static inline const float kGravityAcceleration = 0.05f;
 	// 最大落下速度
 	static inline const float kLimitFallSpeed = 1.0f;
 	// ジャンプ初速
-	static inline const float kJumpAcceleration = .5f;
+	static inline const float kJumpAcceleration = 1.0f;
 	// マップチップによるフィールド
 	MapchipField* mapChipField_ = nullptr;
 	//着地速度減衰

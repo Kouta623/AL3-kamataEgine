@@ -78,7 +78,11 @@ private: // メンバ変数
 	uint32_t enemyTextureHandle_=0;
 	Player* player_ = nullptr;
 
+	Model* modelPlayer_ = nullptr;
+
+	Model* modelEnemy_ = nullptr;
 	Model* modelBlock_ = nullptr;
+
 	uint32_t blockTextureHandle_ = 0u;
 	std::vector<std::vector<WorldTransform*>> worldTransformBlocks_;
 	bool isDebugCameraActive_ = false;

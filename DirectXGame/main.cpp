@@ -81,9 +81,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	AxisIndicator* axisIndicator = nullptr;
 	PrimitiveDrawer* primitiveDrawer = nullptr;
 	scene = Scene::kTitle;
-	titleScene = new TitleScene;
-	titleScene->Initialize();
-
 	// ゲームウィンドウの作成
 	win = WinApp::GetInstance();
 	win->CreateGameWindow(L"GC2B_13_ナカムラ_コウタ_AL3" );
@@ -91,6 +88,11 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	// DirectX初期化処理
 	dxCommon = DirectXCommon::GetInstance();
 	dxCommon->Initialize(win);
+
+	
+	titleScene = new TitleScene;
+	titleScene->Initialize();
+
 
 #pragma region 汎用機能初期化
 	// ImGuiの初期化

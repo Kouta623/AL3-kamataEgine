@@ -13,6 +13,8 @@ GameScene::~GameScene() {
 	delete modelBlock_;
 	delete debugCamera_;
 	delete modelSkydome_;
+	delete modelPlayer_;
+	delete modelEnemy_;
 	delete mapChipField_;
 	for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_) {
 		for (WorldTransform* worldTransformBlocks : worldTransformBlockLine) {
@@ -31,12 +33,12 @@ void GameScene::Initialize() {
 	input_ = Input::GetInstance();
 	audio_ = Audio::GetInstance();
 
-	textureHandle_ = TextureManager::Load("uvChecker.png");
+	textureHandle_ = TextureManager::Load("nightSky.png");
 	model_ = Model::Create();
 	worldTransform_.Initialize();
 	viewProjection_.Initialize();
 
-	player_ = new Player();
+	
 
 	modelBlock_ = Model::Create();
 	blockTextureHandle_ = TextureManager::Load("cube/cube.jpg");
@@ -52,18 +54,20 @@ void GameScene::Initialize() {
 	mapChipField_->LoadMapChipCsv("Resources/blocks.csv");
 
 	GenerateBlocks();
+	modelPlayer_ = Model::CreateFromOBJ("Player", true);
 
+	player_ = new Player();
+	Vector3 playerPosition = mapChipField_->GetMapChipPositionByIndex(2, 17);
+	player_->Initialize(modelPlayer_, &viewProjection_, playerPosition);
 	player_->SetMapchipField(mapChipField_);
 	// プレイヤ配置
-	Vector3 playerPosition = mapChipField_->GetMapChipPositionByIndex(2, 17);
-	player_->Initialize(model_, textureHandle_, &viewProjection_, playerPosition);
-
+	modelEnemy_ = Model::CreateFromOBJ("Enemy", true);
 	for (int32_t i = 0; i < 3; ++i) {
 
 		Enemy* newEnemy = new Enemy();
 		// 敵配置
 		Vector3 enemyPosition = mapChipField_->GetMapChipPositionByIndex(20 + i * 5, 18);
-		newEnemy->Initialize(model_, textureHandle_, &viewProjection_, enemyPosition);
+		newEnemy->Initialize(modelEnemy_, &viewProjection_, enemyPosition);
 		enemies_.push_back(newEnemy);
 	}
 
@@ -281,7 +285,7 @@ void GameScene::ChangePhase() {
 	case Phase::kDeth:
 		if (deathParticles_ && deathParticles_->IsFinished()) {
 
-			finished_ = false;
+			finished_ = true;
 		}
 		break;
 	default:
