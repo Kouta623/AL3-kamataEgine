@@ -4,6 +4,7 @@
 #include <WorldTransform.h>
 #include <cassert>
 
+
 class TitleText {
 public:
 
@@ -21,5 +22,4 @@ private:
 	// モデル
 	Model* model_ = nullptr;
 
-	float moveTimer_ = 0.0f;
 };
