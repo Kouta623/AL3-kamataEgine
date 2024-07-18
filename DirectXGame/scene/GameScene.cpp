@@ -176,6 +176,9 @@ void GameScene::Draw() {
 #pragma region 3Dオブジェクト描画
 	// 3Dオブジェクト描画前処理
 	Model::PreDraw(commandList);
+	if (player_->isDead()==false) {
+		player_->Draw();
+	}
 	player_->Draw();
 	for (Enemy* enemy : enemies_) {
 		enemy->Draw();
