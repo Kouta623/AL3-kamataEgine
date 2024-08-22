@@ -60,6 +60,8 @@ void GameScene::Initialize() {
 	Vector3 playerPosition = mapChipField_->GetMapChipPositionByIndex(2, 17);
 	player_->Initialize(modelPlayer_, &viewProjection_, playerPosition);
 	player_->SetMapchipField(mapChipField_);
+
+
 	// プレイヤ配置
 	modelEnemy_ = Model::CreateFromOBJ("Enemy", true);
 	for (int32_t i = 0; i < 3; ++i) {
