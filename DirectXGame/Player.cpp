@@ -216,6 +216,8 @@ void Player::CollisionMapTop(CollisionMapInfo& info) {
 		info.move.y = std::max(0.0f, (rect.bottom - worldTransform_.translation_.y) - kHeight / 2 - kBlank);
 		info.ceiling = true;
 	}
+
+	
 }
 // 下
 void Player::CollisionMapBottom(CollisionMapInfo& info) {
@@ -257,6 +259,7 @@ void Player::CollisionMapBottom(CollisionMapInfo& info) {
 		info.move.y = std::min(0.0f, ((rect.top - worldTransform_.translation_.y) + (kHeight / 2)) + kBlank);
 		info.landing = true;
 	}
+	
 }
 
 
@@ -300,6 +303,10 @@ void Player::CollisionMapRight(CollisionMapInfo& info) {
 		Rect rect = mapChipField_->GetRectByIndex(indexSet.xIndex, indexSet.yIndex);
 		info.move.x = std::max(0.0f, (rect.left - worldTransform_.translation_.x) - kWidth / 2 - kBlank);
 		info.hitwall = true;
+	}
+
+	if (mapChipType == MapChipType::kGool) {
+		// クリア
 	}
 }
 

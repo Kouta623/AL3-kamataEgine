@@ -64,7 +64,7 @@ void GameScene::Initialize() {
 
 	// プレイヤ配置
 	modelEnemy_ = Model::CreateFromOBJ("Enemy", true);
-	for (int32_t i = 0; i < 3; ++i) {
+	for (int32_t i = 0; i <5 /*70*/; ++i) {
 
 		Enemy* newEnemy = new Enemy();
 		// 敵配置

@@ -7,6 +7,7 @@
 enum class MapChipType {
 	kBlank,
 	kBlock,
+	kGool,
 };
 
 struct MapchipData {

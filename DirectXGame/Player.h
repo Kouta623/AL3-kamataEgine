@@ -122,7 +122,7 @@ private:
 	// 最大落下速度
 	static inline const float kLimitFallSpeed = 1.0f;
 	// ジャンプ初速
-	static inline const float kJumpAcceleration = 1.0f;
+	static inline const float kJumpAcceleration = 0.8f;
 	// マップチップによるフィールド
 	MapchipField* mapChipField_ = nullptr;
 	//着地速度減衰

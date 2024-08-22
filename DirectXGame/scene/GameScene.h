@@ -103,4 +103,5 @@ private: // メンバ変数
 	DeathParticles* deathParticles_ = nullptr;
 	
 	bool finished_ = false;
+	bool isGool_ = false;
 };
