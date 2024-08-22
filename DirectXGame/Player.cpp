@@ -159,6 +159,9 @@ Vector3 CollisionPosition(const Vector3& center, Corner corner) {
 
 	return center + offsetTable[static_cast<uint32_t>(corner)];
 }
+
+bool Player::GetGool() { return isGool_; }
+
 void Player::CollisionMap(CollisionMapInfo& info) {
 
 	CollisionMapTop(info);
@@ -306,7 +309,7 @@ void Player::CollisionMapRight(CollisionMapInfo& info) {
 	}
 
 	if (mapChipType == MapChipType::kGool) {
-		// クリア
+		isGool_ = true;
 	}
 }
 

@@ -87,6 +87,9 @@ public:
 	// デスフラグgetter
 	bool isDead() const { return isDead_; }
 
+	bool GetGool();
+
+
 private:
 	void CollisionMap(CollisionMapInfo& info);
 	void CollisionMapTop(CollisionMapInfo& info);
@@ -132,4 +135,6 @@ private:
 
     // デスフラグ
 	bool isDead_ = false;
+
+	bool isGool_ = false;
 };

@@ -10,6 +10,7 @@
 
 GameScene* gameScene = nullptr;
 TitleScene* titleScene = nullptr;
+
 enum class Scene { 
 	
 	kUnknow = 0,

@@ -64,11 +64,11 @@ void GameScene::Initialize() {
 
 	// プレイヤ配置
 	modelEnemy_ = Model::CreateFromOBJ("Enemy", true);
-	for (int32_t i = 0; i <5 /*70*/; ++i) {
+	for (int32_t i = 0; i <70; ++i) {
 
 		Enemy* newEnemy = new Enemy();
 		// 敵配置
-		Vector3 enemyPosition = mapChipField_->GetMapChipPositionByIndex(20 + i * 5, 18);
+		Vector3 enemyPosition = mapChipField_->GetMapChipPositionByIndex(15 + i * 5, 18);
 		newEnemy->Initialize(modelEnemy_, &viewProjection_, enemyPosition);
 		enemies_.push_back(newEnemy);
 	}
@@ -103,6 +103,11 @@ void GameScene::Update() {
 		for (Enemy* enemy : enemies_) {
 			enemy->Update();
 		};
+
+		
+		if (player_->GetGool()) {
+			finished_ = true;
+		}
 
 		cameraController_->Update();
 
