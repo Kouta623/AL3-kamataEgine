@@ -19,6 +19,18 @@ void TitleScene::Initialize() {
 	modelText = Model::CreateFromOBJ("title", true);
 	titleText->Initialize(modelText, &viewProjection_);
 
+
+	titleText2 = new TitleText2;
+	modelText2 = Model::CreateFromOBJ("title2", true);
+	titleText2->Initialize(modelText2, &viewProjection_);
+
+	titleText3 = new TitleText3;
+	modelText3 = Model::CreateFromOBJ("title3", true);
+	titleText3->Initialize(modelText3, &viewProjection_);
+
+	titleText4 = new TitleText4;
+	modelText4 = Model::CreateFromOBJ("title4", true);
+	titleText4->Initialize(modelText4, &viewProjection_);
 }
 
 void TitleScene::Update() {
@@ -27,6 +39,11 @@ void TitleScene::Update() {
 		finished_ = true;
 	}
 	titleText->Update();
+	titleText2->Update();
+	titleText3->Update();
+	titleText4->Update();
+
+
 
 }
 
@@ -44,6 +61,10 @@ void TitleScene::Draw() {
 	/// </summary>
 
 	titleText->Draw();
+	titleText2->Draw();
+	titleText3->Draw();
+	titleText4->Draw();
+
 	// fade_->Draw(commandList);
 
 	// 3Dオブジェクト描画後処理
