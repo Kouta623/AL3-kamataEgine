@@ -8,7 +8,7 @@
 #include <algorithm>
 #include <cassert>
 #include <numbers>
-#include <imgui.h>
+//#include <imgui.h>
 #include"AABB.h"
 class MapchipField;
 class Player;
