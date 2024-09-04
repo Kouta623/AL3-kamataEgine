@@ -84,7 +84,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	scene = Scene::kTitle;
 	// ゲームウィンドウの作成
 	win = WinApp::GetInstance();
-	win->CreateGameWindow(L"GC2B_13_ナカムラ_コウタ_AL3" );
+	win->CreateGameWindow(L"GC2B_13_ナカムラ_コウタ_鬼畜run2" );
 
 	// DirectX初期化処理
 	dxCommon = DirectXCommon::GetInstance();
